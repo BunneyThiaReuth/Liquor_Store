@@ -77,6 +77,13 @@
 									</a>
                                 </li>
 								<li class="sidebar-item">
+									<a href="ListCategory.php?page=ListCategory" class="sidebar-link">
+										<span class="hide-menu">
+											List Category
+                                        </span>
+									</a>
+                                </li>
+								<li class="sidebar-item">
 									<a href="#" class="sidebar-link">
 										<span class="hide-menu">
 											Discount
