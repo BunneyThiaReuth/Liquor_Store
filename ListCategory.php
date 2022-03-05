@@ -1,9 +1,11 @@
+<?php
+	include 'database/db_connection.php';
+?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
     <?php
         include 'include/head.php';
-		include 'database/db_connection.php';
     ?>
 	<script type="text/javascript" src="js/deleteCate.js"></script>
 </head>
@@ -25,7 +27,7 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-7 align-self-center">
-                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Category</h3>
+                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Components</h3>
                         <div class="d-flex align-items-center">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0 p-0">
@@ -39,14 +41,10 @@
                 </div>
             </div>
             <div class="container-fluid">
-               		<div class="mb-4">
-						<h1>List Category</h1>
-						<a href="category.php?page=category" class="btn w-25 btn bg-dark text-white">Back</a>
+               		<div>
+						<h1>LIST CATEGOEY</h1>
 					</div>
-				<div id="msg">
-
-				</div>
-				<div class="mt-5" id="tblList">
+				<div class="mt-3" id="tblList">
 					<table id="cateList" class="table-hover table-success">
                         <thead class="bg-success text-white">
                             <tr>
@@ -94,14 +92,30 @@
                                         <box-icon name='edit-alt'></box-icon>
                                     </a>
 									<a href="#">
-										<box-icon name='trash-alt'></box-icon>
+										<box-icon name='trash-alt' data-toggle="modal" data-target="#Modal<?=$rows['cateId']?>"></box-icon>
 									</a>
                                 </td>
                             </tr>
 
                             </div>
-
-                            <?php
+									<!-- Modal -->
+									<div class="modal fade" id="Modal<?=$rows['cateId']?>" tabindex="-1" role="dialog" aria-labelledby="Modal<?=$rows['cateId']?>" aria-hidden="true">
+									  <div class="modal-dialog" role="document">
+										<div class="modal-content">
+										  <div class="modal-header">
+											<h5 class="modal-title" id="Modal<?=$rows['cateId']?>">You Message</h5>
+										  </div>
+										  <div class="modal-body">
+											Are you suer to delete ?
+										  </div>
+										  <div class="modal-footer">
+											<a href="#" class="btn btn-primary w-25">Yes</a>
+											<button type="button" class="btn btn-secondary w-25" data-dismiss="modal">Close</button>
+										  </div>
+										</div>
+									  </div>
+									</div>
+							<?php
                                 $i++;
                                 }
                             ?>

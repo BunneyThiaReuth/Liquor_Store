@@ -26,7 +26,7 @@
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-7 align-self-center">
-                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Category</h3>
+                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">Components</h3>
                         <div class="d-flex align-items-center">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0 p-0">
@@ -40,7 +40,7 @@
             </div>
             <div class="container-fluid">
 					<div>
-						<h1>Create Category</h1>
+						<h1>CREATE CATEGORY</h1>
 					</div>
 				<div id="ms" class="mt-4">
 				
@@ -51,11 +51,11 @@
                         <div class="row">
                             <div class="col">
                                 <label for="name" class="form-label">Name:</label>
-                                <input type="text" id="name" name="txt_cateName" class="form-control" placeholder="Enter category name" required>
+                                <input type="text" id="name" name="txt_cateName" class="form-control" placeholder="Enter category name" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
                             </div>
                             <div class="col">
                                 <label for="status" class="form-label" >Status:</label>
-                                <select id="status" class="form-control" name="txt_status" required>
+                                <select id="status" class="form-control" name="txt_status" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
                                     <option value="1">Enable</option>
                                     <option value="0">Disable</option>
                                 </select>
@@ -64,11 +64,11 @@
                         <div class="row mt-4">
                             <div class="col">
                                 <label for="description" class="form-label">Description</label>
-                                <textarea id="description" rows="7" class="form-control" name="txt_desc" required></textarea>
+                                <textarea id="description" rows="7" class="form-control" name="txt_desc" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;"></textarea>
                             </div>
                         </div>
                         <div class="mt-5">
-                            <button type="submit" class="btn btn-primary w-25">Save</button>
+                            <button type="submit" class="btn btn-primary w-25" style="">Save</button>
                             <button type="reset" class="btn btn-dark w-25">Clear</button>
 							<a href="ListCategory.php?page=ListCategory" class="btn btn bg-success w-25 text-white">List</a>
                         </div>

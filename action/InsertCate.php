@@ -1,5 +1,5 @@
 <?php
-	include('database/db_connection.php');
+	include('../database/db_connection.php');
 
 	$cateName = $_POST['txt_cateName'];
     $desc = $_POST['txt_desc'];
