@@ -73,7 +73,7 @@
                         </div>
                     </form>
 					<div class="mt-3" id="ListcateData">
-								<table id="data" class="display table table-primary">
+								<table id="data" class="table-hover table table-primary">
 
 									<thead>
 										<tr class="bg-primary text-white">

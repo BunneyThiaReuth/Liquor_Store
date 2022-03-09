@@ -84,9 +84,16 @@
 									</a>
                                 </li>
 								<li class="sidebar-item">
-									<a href="#" class="sidebar-link">
+									<a href="discount.php?page=discount" class="sidebar-link">
 										<span class="hide-menu">
 											Discount
+                                        </span>
+									</a>
+                                </li>
+								<li class="sidebar-item">
+									<a href="lsitDiscount.php?page=lsitDiscount" class="sidebar-link">
+										<span class="hide-menu">
+											List Discount
                                         </span>
 									</a>
                                 </li>

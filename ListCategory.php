@@ -96,7 +96,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0 p-0">
                                     <li class="breadcrumb-item"><a href="category.php?page=category">Category</a>
-										<li class="breadcrumb-item"><a href="ListCategory.php?page=Listcategory">Category</a>
+										<li class="breadcrumb-item"><a href="ListCategory.php?page=Listcategory">List Category</a>
                                     </li>
                                 </ol>
                             </nav>
@@ -128,7 +128,7 @@
 					}
 				?>
                 <div class="mt-2">
-					<table id="list" class="display table table-success">
+					<table id="list" class="table-hover table table-success">
 						<thead class="bg-success text-white">
 							<tr>
 								<th class="text-center">#No</th>

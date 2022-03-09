@@ -8,7 +8,7 @@
 ?>
 
 			<?php
-			while($rows = mysqli_fetch_assoc($runselectCate))
+			while($rows = mysqli_fetch_array($runselectCate))
 					{			
 			?>
 				<tr>
