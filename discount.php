@@ -51,13 +51,13 @@
                         <div class="row">
                             <div class="col">
                                 <label class="form-label" for="stDate">Start Date:</label>
-                                <input type="date" class="form-control w-25" name="txt_stDate" id="stDate" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+                                <input type="date" class="form-control w-50" name="txt_stDate" id="stDate" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
                             </div>
                         </div>
                         <div class="row mt-2">
                             <div class="col">
                                 <label class="form-label" for="enDate">End Date:</label>
-                                <input type="date" class="form-control w-25" name="txt_enDate" id="enDate" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+                                <input type="date" class="form-control w-50" name="txt_enDate" id="enDate" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
                             </div>
                         </div>
                         <div class="row mt-2">

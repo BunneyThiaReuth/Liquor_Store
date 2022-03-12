@@ -98,7 +98,7 @@
 									</a>
                                 </li>
                                 <li class="sidebar-item">
-									<a href="#" class="sidebar-link">
+									<a href="newProducts.php?page=newProducts" class="sidebar-link">
 										<span class="hide-menu">
 											New Products
                                         </span>
@@ -146,9 +146,15 @@
                             </ul>
                         </li>
 						<li class="sidebar-item"> 
-							<a class="sidebar-link sidebar-link" href="#" aria-expanded="false">
+							<a class="sidebar-link sidebar-link" href="user.php?page=user" aria-expanded="false">
 								<i data-feather="user" class="feather-icon"></i>
 								<span class="hide-menu">User</span>
+							</a>
+						</li>
+						<li class="sidebar-item"> 
+							<a class="sidebar-link sidebar-link" href="listUser.php?page=listUser" aria-expanded="false">
+								<i data-feather="list" class="feather-icon"></i>
+								<span class="hide-menu">List User</span>
 							</a>
 						</li>
 						
