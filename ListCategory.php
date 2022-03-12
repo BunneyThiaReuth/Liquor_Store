@@ -30,7 +30,17 @@
 				{
 					$enableID = $_GET['enableID'];
 					$sql = "UPDATE `tbl_category` SET `status`='1' WHERE `cateId` = $enableID";
-					mysqli_query($conn,$sql);
+					$result = mysqli_query($conn,$sql);
+					if($result)
+					{
+						$message = 1;
+						$messageDialog = "This record enable is successfully ... ";
+					}
+					else
+					{
+						$message = 0;
+						$messageDialog = "This record enable is successfully ... ";
+					}
 				}
 				break;
 			case '3':
@@ -38,7 +48,17 @@
 				{
 					$disabelID = $_GET['disabelID'];
 					$sql = "UPDATE `tbl_category` SET `status`='0' WHERE `cateId` = $disabelID";
-					mysqli_query($conn,$sql);
+					$result = mysqli_query($conn,$sql);
+					if($result)
+					{
+						$message = 1;
+						$messageDialog = "This record disable is successfully ... ";
+					}
+					else
+					{
+						$message = 0;
+						$messageDialog = "This record disable is successfully ... ";
+					}
 				}
 				break;
 			case '4':
