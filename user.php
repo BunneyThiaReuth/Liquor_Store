@@ -35,7 +35,7 @@
         ?>
 
         <div class="page-wrapper">
-        <div class="page-breadcrumb">
+            <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-7 align-self-center">
                         <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">CREAT USERS</h3>
@@ -58,7 +58,7 @@
                             <div class="input-group mt-2">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" onchange="previewFile(this);" id="customFile">
-                                    <input type="button" class="custom-file-label btn bg-primary text-white w-100" value="Upload Image" for="customFile">
+                                    <input type="button" class="custom-file-label btn bg-danger text-white w-100" value="Upload Image" for="customFile">
                                 </div>
                             </div>
                         </div>
@@ -130,41 +130,11 @@
                         </div>
                     </div>
                 </form>
-                <div class="mt-2">
-                <table class="table table-primary table-hover">
-                    <thead class="bg-primary text-white">
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Date Of Birth</th>
-                        <th>Gander</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Password</th>
-                        <th>Status</th>
-                        <th>Address</th>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
             </div>
-            </div>
-            
             <footer class="footer text-center text-muted">
                 All Rights Reserved by Bunney ThiaReuth.
             </footer>
         </div>
-
     </div>
 <?php
 include 'include/scriptFooter.php';
