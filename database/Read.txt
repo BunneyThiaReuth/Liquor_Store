@@ -6,6 +6,3 @@ stept 2:
     import script ('liquor_store') into database
 stept 3:
     go to browser type localhost/liquor_store
-
-Note::
-    This Project Complete only category form.
