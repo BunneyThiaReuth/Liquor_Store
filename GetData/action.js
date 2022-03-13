@@ -17,8 +17,8 @@ $(document).ready(function(){
 		document.getElementById('description').value = "";
 	});
 
-		//Insert Discount Data to Database
-		$(document).on('submit','#inserDiscountData',function(e){
+	//Insert Discount Data to Database
+	$(document).on('submit','#inserDiscountData',function(e){
 			e.preventDefault();
 			$.ajax({
 			method:"POST",

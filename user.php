@@ -1,3 +1,50 @@
+<?php
+	include('database/db_connection.php');
+    $message=-1;
+    $messageDialog="";
+    if(isset($_GET['action']))
+    {
+        $fistName = $_POST['txt_fistname'];
+        $lastName = $_POST['txt_lastname'];
+        $dob = $_POST['txt_dob'];
+        $gender = $_POST['txt_gender'];
+        $role = $_POST['txt_role'];
+        $status = $_POST['txt_status'];
+        $email = $_POST['txt_email'];
+        $pws = $_POST['txt_pwd'];
+        $address = $_POST['txt_address'];
+
+        $image = "noimage.png";
+         if(isset($_FILES['txt_image']))
+         {
+            $image = time().basename($_FILES['txt_image']['name']);
+            $part = "images/userImage/".$image;
+            move_uploaded_file($_FILES['txt_image']['tmp_name'],$part);
+            $nw=50;
+            $nh=50;
+            $thumbnail = imagecreatetruecolor($nw,$nh);
+            $source = imagecreatefromjpeg($part);
+            list($w,$h,$t) = getimagesize($part);
+            imagecopyresized($thumbnail,$source,0,0,0,0,$nw,$nh,$w,$h);
+            imagejpeg($thumbnail,"images/userImage/thamnail/".$image);
+        }
+
+        $insertSQL = "INSERT INTO `tbl_user`(`image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES ('$image','$fistName','$lastName','$dob','$gender','$role','$status','$email','$pws','$address')";
+        $runSQL = mysqli_query($conn,$insertSQL);
+        if($runSQL)
+        {
+            $message =1;
+            $messageDialog = "User created is successfulyy...";
+        }
+        else
+        {
+            $message =0;
+            $messageDialog = "User created is notsuccessfulyy...";
+        }
+    }
+    
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
@@ -51,13 +98,31 @@
                 </div>
             </div>
             <div class="container-fluid">
-                <form action="#" enctype="multipart/form-data" method="post">
+                <?php
+                    if($message == 1)
+                    {
+                ?>
+                <div class="alert alert-primary" role="alert">
+                    <strong><h3>Success !</h3></strong><p><?=$messageDialog?></p>
+                </div>
+                <?php
+                    }
+                    elseif($message == 0)
+                    {
+                ?>
+                <div class="alert alert-danger" role="alert">
+                    <strong><h3>Success !</h3></strong><p><?=$messageDialog?></p>
+                </div>
+                <?php
+                    }
+                ?>
+                <form enctype="multipart/form-data" method="POST" action="user.php?page=user&action=1">
                     <div class="row container">
                         <div class="rounded mb-4 img-thumbnail col col-lg-3" style="width:200px;height:200px;">
                             <img id="previewImg" src="images/defualtImage.png" alt="Preview Image" width="100%" height="100%" class="rounded">
                             <div class="input-group mt-2">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" onchange="previewFile(this);" id="customFile">
+                                    <input type="file" name="txt_image" class="custom-file-input" onchange="previewFile(this);" id="customFile" required/>
                                     <input type="button" class="custom-file-label btn bg-danger text-white w-100" value="Upload Image" for="customFile">
                                 </div>
                             </div>
@@ -127,6 +192,7 @@
                         <div class="mt-3">
                             <button type="submit" class="btn btn-primary w-25">Save</button>
                             <button type="reset" class="btn btn-dark w-25">Clear</button>
+                            <a href="listUser.php?page=listUser" class="btn btn-success float-right">User List</a>
                         </div>
                     </div>
                 </form>
@@ -146,5 +212,4 @@ include 'include/scriptFooter.php';
     }
 </script>
 </body>
-
 </html>
