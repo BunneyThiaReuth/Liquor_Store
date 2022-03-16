@@ -13,34 +13,54 @@
         $email = $_POST['txt_email'];
         $pws = $_POST['txt_pwd'];
         $address = $_POST['txt_address'];
-
+		
+		
         $image = "noimage.png";
          if(isset($_FILES['txt_image']))
          {
-            $image = time().basename($_FILES['txt_image']['name']);
-            $part = "images/userImage/".$image;
-            move_uploaded_file($_FILES['txt_image']['tmp_name'],$part);
-            $nw=50;
-            $nh=50;
-            $thumbnail = imagecreatetruecolor($nw,$nh);
-            $source = imagecreatefromjpeg($part);
-            list($w,$h,$t) = getimagesize($part);
-            imagecopyresized($thumbnail,$source,0,0,0,0,$nw,$nh,$w,$h);
-            imagejpeg($thumbnail,"images/userImage/thamnail/".$image);
+			 $allowedtype = array('jpg','png','jpeg');
+			 $imagetype = pathinfo($_FILES['txt_image']['name'],PATHINFO_EXTENSION);
+			 if(!in_array($imagetype,$allowedtype))
+			 {
+				 $message =0;
+            	$messageDialog = "This file type is not allowed !";
+			 }
+			 else
+			 {
+				$image = time().basename($_FILES['txt_image']['name']);
+				$part = "images/userImage/".$image;
+				move_uploaded_file($_FILES['txt_image']['tmp_name'],$part);
+				$nw=50;
+				$nh=50;
+				$thumbnail = imagecreatetruecolor($nw,$nh);
+				$source; //= imagecreatefromjpeg($part);
+				if($imagetype == 'jpg' or $imagetype == 'jpeg')
+				{
+					$source = imagecreatefromjpeg($part);
+				}
+				elseif($imagetype == 'png')
+				{
+					$source = imagecreatefrompng($part);
+				}
+				list($w,$h,$t) = getimagesize($part);
+				imagecopyresized($thumbnail,$source,0,0,0,0,$nw,$nh,$w,$h);
+				imagejpeg($thumbnail,"images/userImage/thamnail/".$image);
+				 
+				 $insertSQL = "INSERT INTO `tbl_user`(`image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES ('$image','$fistName','$lastName','$dob','$gender','$role','$status','$email','$pws','$address')";
+					$runSQL = mysqli_query($conn,$insertSQL);
+					if($runSQL)
+					{
+						$message =1;
+						$messageDialog = "User created is <strong>successfully...";
+					}
+					else
+					{
+						$message =0;
+						$messageDialog = "User created is not successfully...";
+					}
+			 }
         }
-
-        $insertSQL = "INSERT INTO `tbl_user`(`image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES ('$image','$fistName','$lastName','$dob','$gender','$role','$status','$email','$pws','$address')";
-        $runSQL = mysqli_query($conn,$insertSQL);
-        if($runSQL)
-        {
-            $message =1;
-            $messageDialog = "User created is successfulyy...";
-        }
-        else
-        {
-            $message =0;
-            $messageDialog = "User created is notsuccessfulyy...";
-        }
+        
     }
     
 ?>
@@ -51,7 +71,7 @@
     <?php
         include 'include/head.php';
     ?>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script>
     function previewFile(input){
         var file = $("input[type=file]").get(0).files[0];
@@ -65,7 +85,6 @@
         }
     }
 </script>
-
 </head>
 <body>
 
@@ -103,7 +122,7 @@
                     {
                 ?>
                 <div class="alert alert-primary" role="alert">
-                    <strong><h3>Success !</h3></strong><p><?=$messageDialog?></p>
+                    <h3><strong>Success !</strong></h3><p><?=$messageDialog?></p>
                 </div>
                 <?php
                     }
@@ -111,7 +130,7 @@
                     {
                 ?>
                 <div class="alert alert-danger" role="alert">
-                    <strong><h3>Success !</h3></strong><p><?=$messageDialog?></p>
+                    <h3><strong>Error !</strong></h3><p><?=$messageDialog?></p>
                 </div>
                 <?php
                     }
@@ -190,9 +209,9 @@
                             </div>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary w-25">Save</button>
-                            <button type="reset" class="btn btn-dark w-25">Clear</button>
-                            <a href="listUser.php?page=listUser" class="btn btn-success float-right">User List</a>
+                            <button type="submit" class="btn btn-primary w-25">Save <i class="fas ml-2 fa-save"></i></button>
+                            <button type="reset" class="btn btn-dark w-25">Clear <i class="fas ml-2 fa-eraser"></i></button>
+                            <a href="listUser.php?page=listUser" class="btn btn-success float-right">User List <i class="fas ml-2 fa-list"></i></a>
                         </div>
                     </div>
                 </form>

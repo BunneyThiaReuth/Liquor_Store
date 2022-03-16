@@ -265,7 +265,7 @@
                                                         <input type="date" id="enDate" value="<?=$rows['endDate']?>" name="txt_enDate" class="form-control" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;"/>
                                                     </div>
                                                     <div class="float-right mt-3">
-                                                        <button type="submit" class="btn btn-primary">Update</button>
+                                                        <button type="submit" class="btn btn-primary">Update <i class="fas ml-2 fa-save"></i></button>
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                                     </div>
                                                     

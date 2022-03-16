@@ -232,8 +232,8 @@
 							<label for="textDesc" class="form-label">Description :</label>
 							<textarea rows="5" class="form-control" id="textDesc" name="upDesc" placeholder="Update Description" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;"><?=$rows['description']?></textarea>
 							<div class="modal-footer">
-								<button type="submit" class="btn btn-primary w-25">Update</button>
-								<button type="button" class="btn btn-secondary w-25" data-dismiss="modal">Close</button>
+								<button type="submit" class="btn btn-primary w-25">Update <i class="fas ml-2 fa-save"></i></button>
+								<button type="button" class="btn btn-secondary w-25" data-dismiss="modal">Close </button>
 							 </div>
 						  </form>
 					  </div>

@@ -67,9 +67,9 @@
                             </div>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" class="btn btn-primary w-25">Save</button>
-                            <button type="reset" class="btn btn-dark w-25">Clear</button>
-							<a href="ListCategory.php?page=ListCategory" class="btn btn-success float-right">Show List</a>
+                            <button type="submit" class="btn btn-primary w-25">Save <i class="fas ml-2 fa-save"></i></button>
+                            <button type="reset" class="btn btn-dark w-25">Clear <i class="fas ml-2 fa-eraser"></i></button>
+							<a href="ListCategory.php?page=ListCategory" class="btn btn-success float-right">Show List <i class="fas ml-2 fa-list"></i></a>
                         </div>
                     </form>
 					<div class="mt-3" id="ListcateData">
