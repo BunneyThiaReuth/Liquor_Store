@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 13, 2022 at 06:11 PM
+-- Generation Time: Mar 21, 2022 at 01:56 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.26
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `tbl_category` (
   `description` varchar(255) DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`cateId`)
-) ENGINE=InnoDB AUTO_INCREMENT=107 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_category`
@@ -117,21 +117,26 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
   `gender` int NOT NULL,
   `role` int NOT NULL,
   `status` int NOT NULL,
-  `email` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
+  `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `password` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `address` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `password` (`password`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_user`
 --
 
 INSERT INTO `tbl_user` (`id`, `image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES
-(17, '16471940011.jpg', 'Bunney', 'ThiaReuth', '2000-09-20', 1, 3, 1, 'thiareuht@gmail.com', 'admin', 'PP'),
-(18, '1647194064Koala.jpg', 'Ly', 'Nita', '2000-04-12', 2, 1, 1, 'nita@gmail.com', 'sale', 'PP'),
-(19, '1647194166Penguins.jpg', 'Hong', 'Davit', '2003-01-22', 1, 2, 1, 'davit@gmail.com', 'stock', 'PP'),
-(20, '1647194347noimage.png', 'Admin', 'IT', '2000-10-02', 1, 3, 0, 'adminit@gmail.com', 'adminit', 'PP');
+(18, '1647869892259897-sky-landscape.jpg', 'Lyna', 'Nita', '2000-04-12', 1, 1, 0, 'nita@gmail.com', 'sale', 'PP'),
+(19, '1647194166Penguins.jpg', 'Hong', 'Davit', '2000-01-22', 1, 1, 0, 'davit@gmail.com', 'stock', 'PP'),
+(29, '1647421813employee wellness center_hero.jpg', 'Chong', 'Lina', '1998-10-02', 0, 2, 1, 'lina@gmail.com', 'lina', 'PP'),
+(30, '1647428298Max-R_Headshot (1).jpg', 'Leng', 'Dina', '1992-10-02', 1, 2, 1, 'dina@gmail.com', 'dina', 'PP'),
+(31, '1647428420d5jA8OZv.jpg', 'Seng', 'Dara', '1992-12-02', 1, 1, 1, 'dara@gmai.com', 'dara', 'PP'),
+(32, '16474285204.jpg', 'Meng', 'kakNika', '1992-09-12', 0, 2, 0, 'kaknika@gmail.com', 'kaknika', 'ST'),
+(46, '16478554151.jpg', 'Bunney', 'ThiaReuth', '2000-09-20', 1, 3, 1, 'bunneythiareuth@gmail.com', 'admin', 'PP');
 
 --
 -- Constraints for dumped tables

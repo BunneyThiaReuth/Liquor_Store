@@ -51,7 +51,7 @@
 					if($runSQL)
 					{
 						$message =1;
-						$messageDialog = "User created is <strong>successfully...";
+						$messageDialog = "User created is successfully...";
 					}
 					else
 					{

@@ -15,12 +15,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user disabled is successfully...";
+						$messageDailog = "User disabled is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user disabled is not successfully...";	
+						$messageDailog = "User disabled is not successfully...";	
 					}
 				}
 				break;
@@ -33,12 +33,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user enabled is successfully...";
+						$messageDailog = "User enabled is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user enabled is not successfully...";	
+						$messageDailog = "User enabled is not successfully...";	
 					}
 				}
 				break;
@@ -51,12 +51,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user changed gender to female is successfully...";
+						$messageDailog = "User changed gender to female is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user changed gender to female is not successfully...";	
+						$messageDailog = "User changed gender to female is not successfully...";	
 					}
 				}
 				break;
@@ -69,12 +69,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user changed gender to male is successfully...";
+						$messageDailog = "User changed gender to male is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user changed gender to male is not successfully...";	
+						$messageDailog = "User changed gender to male is not successfully...";	
 					}
 				}
 				break;
@@ -87,12 +87,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user updated role is successfully...";
+						$messageDailog = "User updated role is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user updated role is not successfully...";	
+						$messageDailog = "User updated role is not successfully...";	
 					}
 				}
 				break;
@@ -105,12 +105,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user updated role is successfully...";
+						$messageDailog = "User updated role is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user updated role is not successfully...";	
+						$messageDailog = "User updated role is not successfully...";	
 					}
 				}
 				break;
@@ -123,12 +123,12 @@
 					if($runsql)
 					{
 						$message =1;
-						$messageDailog = "This user updated role is successfully...";
+						$messageDailog = "User updated role is successfully...";
 					}
 					else
 					{
 						$message =0;
-						$messageDailog = "This user updated role is not successfully...";	
+						$messageDailog = "User updated role is not successfully...";	
 					}
 				}
 				break;
@@ -150,14 +150,14 @@
 							if($runsql)
 							{
 								$message =1;
-								$messageDailog = "This user Deleted is successfully...";
+								$messageDailog = "User Deleted is successfully...";
 								unlink($trimpath);
 								unlink($trimpaththumbnail);
 							}
 							else
 							{
 								$message =0;
-								$messageDailog = "This user Deleted is not successfully...";
+								$messageDailog = "User Deleted is not successfully...";
 							}
 						}
 						elseif(file_exists($trimpath) && !file_exists($trimpaththumbnail))
@@ -167,13 +167,13 @@
 							if($runsql)
 							{
 								$message =1;
-								$messageDailog = "This user Deleted is successfully...";
+								$messageDailog = "User Deleted is successfully...";
 								unlink($trimpath);
 							}
 							else
 							{
 								$message =0;
-								$messageDailog = "This user Deleted is not successfully...";
+								$messageDailog = "User Deleted is not successfully...";
 							}
 						}
 						elseif(!file_exists($trimpath) && file_exists($trimpaththumbnail))
@@ -183,30 +183,115 @@
 							if($runsql)
 							{
 								$message =1;
-								$messageDailog = "This user Deleted is successfully...";
+								$messageDailog = "User Deleted is successfully...";
 								unlink($trimpaththumbnail);
 							}
 							else
 							{
 								$message =0;
-								$messageDailog = "This user Deleted is not successfully...";
+								$messageDailog = "User Deleted is not successfully...";
 							}
 						}
-						else{
+						else
+						{
 							$sql ="DELETE FROM `tbl_user` WHERE `id`=$id";
 							$runsql = mysqli_query($conn,$sql);
 							if($runsql)
 							{
 								$message =1;
-								$messageDailog = "This user Deleted is successfully...";
+								$messageDailog = "User Deleted is successfully...";
 							}
 							else
 							{
 								$message =0;
-								$messageDailog = "This user Deleted is not successfully...";
+								$messageDailog = "User Deleted is not successfully...";
 							}
 						}
 						
+					}
+				}
+				break;
+			case '9':
+				if(isset($_GET['id']))
+				{
+					$id = $_GET['id'];
+					$sql = "SELECT * FROM `tbl_user` WHERE `id`=$id";
+					$runsql = mysqli_query($conn,$sql);
+					$data = mysqli_fetch_array($runsql);
+					
+					$fname = $data['fistName'];
+					$lname = $data['lastName'];
+					$dob = $data['dob'];
+					$email = $data['email'];
+					$pwd = $data['password'];
+					$address = $data['address'];
+					$img = $data['image'];
+				}
+				break;
+			case '10':
+				if(isset($_POST['txt_ID']))
+				{
+					$id = $_POST['txt_ID'];
+					
+					$fname = $_POST['txt_fname'];
+					$lname = $_POST['txt_lname'];
+					$dob = $_POST['txt_dob'];
+					$email = $_POST['txt_email'];
+					$password = $_POST['txt_pwd'];
+					$address = $_POST['txt_address'];
+					
+					$image = $_POST['OldImg'];
+					if(isset($_FILES['txt_image']))
+					{
+						$allowedtype = array('jpg','png','jpeg');
+						 $imagetype = pathinfo($_FILES['txt_image']['name'],PATHINFO_EXTENSION);
+						 if(!in_array($imagetype,$allowedtype))
+						 {
+							 $message =0;
+							$messageDialog = "This file type is not allowed !";
+						 }
+						 else
+						 {
+							$image = time().basename($_FILES['txt_image']['name']);
+							$part = "images/userImage/".$image;
+							move_uploaded_file($_FILES['txt_image']['tmp_name'],$part);
+							$nw=50;
+							$nh=50;
+							$thumbnail = imagecreatetruecolor($nw,$nh);
+							$source; //= imagecreatefromjpeg($part);
+							if($imagetype == 'jpg' or $imagetype == 'jpeg')
+							{
+								$source = imagecreatefromjpeg($part);
+							}
+							elseif($imagetype == 'png')
+							{
+								$source = imagecreatefrompng($part);
+							}
+							list($w,$h,$t) = getimagesize($part);
+							imagecopyresized($thumbnail,$source,0,0,0,0,$nw,$nh,$w,$h);
+							imagejpeg($thumbnail,"images/userImage/thamnail/".$image);
+							
+							$imgpath = $_POST['OldImg'];
+							$path = "images/userImage/".$imgpath;
+							$paththumbnail = "images/userImage/thamnail/".$imgpath;
+							$trmpath = trim($path);
+							$trmpathThumbnail = trim($paththumbnail);
+							unlink($trmpath);
+							unlink($trmpathThumbnail);
+								
+						 }
+					}
+					$sql = "UPDATE `tbl_user` SET `image`='$image',`fistName`='$fname',`lastName`='$lname',`dob`='$dob',`email`='$email',`password`='$password',`address`='$address' WHERE `id` = $id";
+					$runsql = mysqli_query($conn,$sql);
+					if($runsql)
+					{
+						$message=1;
+						$messageDailog = "User updated is successfully...";
+					}
+					else
+					{
+						$message=0;
+						$messageDailog = "User updated is not successfully...";
 					}
 				}
 				break;
@@ -219,7 +304,20 @@
     <?php
         include 'include/head.php';
     ?>
-
+	    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    function previewFile(input){
+        var file = $("input[type=file]").get(0).files[0];
+        if(file){
+            var reader = new FileReader();
+            reader.onload = function(){
+                $("#previewImg").attr("src", reader.result);
+            }
+ 
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
 </head>
 <body>
 
@@ -274,6 +372,70 @@
 					</div>
 				<?php
 					}
+				?>
+				<?php
+					if(isset($_GET['action']) && $_GET['action']== 9)
+					{
+				?>
+				<strong><h1>UPDATE USER</h1></strong>
+				<div class="mt-4">
+					
+					<form method="post" enctype="multipart/form-data" action="listUser.php?page=listUser&action=10">
+						<input type="hidden" value="<?=$id?>" name="txt_ID">
+						<input type="hidden" value="<?=$img?>" name="OldImg">
+						<div class="row">
+							<div class="rounded mb-4 img-thumbnail col col-lg-3" style="width:200px;height:200px;">
+								<img id="previewImg" src="images/userImage/<?=$img?>" alt="Preview Image" width="100%" height="100%" class="rounded">
+								<div class="input-group mt-2">
+									<div class="custom-file">
+										<input type="file" name="txt_image" class="custom-file-input" onchange="previewFile(this);" id="customFile"/>
+										<input type="button" class="custom-file-label btn bg-danger text-white w-100" value="Upload New Image" for="customFile">
+									</div>
+								</div>
+                        	</div>
+							<div class="col">
+								<div class="row mt-4">
+									<div class="col">
+										<label class="form-label" for="fname">First Name:</label>
+										<input type="text" name="txt_fname" id="fname" class="form-control" value="<?=$fname?>" placeholder="Update first name" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+									</div>
+									<div class="col">
+										<label class="form-label" for="lname">Last Name:</label>
+										<input type="text" name="txt_lname" id="lname" class="form-control" value="<?=$lname?>" placeholder="Update last name" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+									</div>
+									<div class="col">
+										<label class="form-label" for="dob">Date Of Birth:</label>
+										<input type="date" name="txt_dob" id="dob" class="form-control" value="<?=$dob?>" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+									</div>
+								</div>
+								<div class="row mt-4">
+									<div class="col">
+										<label class="form-label" for="mail">Email:</label>
+										<input type="email" name="txt_email" id="mail" class="form-control" value="<?=$email?>" placeholder="Update email" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+									</div>
+									<div class="col">
+										<label class="form-label" for="pwd">Password:</label>
+										<input type="password" name="txt_pwd" id="pwd" class="form-control" value="<?=$pwd?>" placeholder="Update password" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col">
+								<label for="address" class="form-label">Address:</label>
+								<textarea rows="5" class="form-control" id="address" name="txt_address" placeholder="Update address" style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;"><?=$address?></textarea>
+							</div>
+						</div>
+						<div class="mt-4">
+							<button type="submit" class="btn btn-primary w-25">Update</button>
+							<button type="reset" class="btn btn-danger w-25">Clear</button>
+						</div>
+					</form>
+				</div>
+			<?php
+					}
+					else
+					{
 				?>
                <table id="list" class="table table-primary">
                    <thead>
@@ -380,8 +542,8 @@
 							   		<a href="#">
 										<box-icon type='solid' name='user-detail' data-toggle="modal" data-target="#UserModal<?=$rows['id']?>"></box-icon>
 							   		</a>
-                           			<a href="#">
-										<box-icon name='edit' type='solid' ></box-icon>
+                           			<a href="listUser.php?page=listUser&action=9&id=<?=$rows['id']?>">
+										<box-icon name='edit' type='solid'></box-icon>
 									</a>
 									<a href="#">
 										<box-icon name='trash' data-toggle="modal" data-target="#deleteModal<?=$rows['id']?>"></box-icon>
@@ -519,6 +681,9 @@
                     ?>
                    </tbody>
                </table>
+			<?php
+					}
+				?>
             </div>
 
             <footer class="footer text-center text-muted">
