@@ -1,3 +1,12 @@
+<?php
+    include('libaries/auth.php');
+    if(!isLogin())
+    {
+        header("location:login/login.php?page=login");
+        exit();
+    }
+?>
+
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>

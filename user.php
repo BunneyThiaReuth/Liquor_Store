@@ -1,5 +1,11 @@
 <?php
 	include('database/db_connection.php');
+    include('libaries/auth.php');
+    if(!isLogin())
+    {
+        header("location:login/login.php?page=login");
+        exit();
+    }
     $message=-1;
     $messageDialog="";
     if(isset($_GET['action']))
