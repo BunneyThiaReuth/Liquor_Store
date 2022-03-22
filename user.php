@@ -33,29 +33,31 @@
 			 }
 			 else
 			 {
-				$image = time().basename($_FILES['txt_image']['name']);
-				$part = "images/userImage/".$image;
-				move_uploaded_file($_FILES['txt_image']['tmp_name'],$part);
-				$nw=50;
-				$nh=50;
-				$thumbnail = imagecreatetruecolor($nw,$nh);
-				$source; //= imagecreatefromjpeg($part);
-				if($imagetype == 'jpg' or $imagetype == 'jpeg')
-				{
-					$source = imagecreatefromjpeg($part);
-				}
-				elseif($imagetype == 'png')
-				{
-					$source = imagecreatefrompng($part);
-				}
-				list($w,$h,$t) = getimagesize($part);
-				imagecopyresized($thumbnail,$source,0,0,0,0,$nw,$nh,$w,$h);
-				imagejpeg($thumbnail,"images/userImage/thamnail/".$image);
-				 
-				 $insertSQL = "INSERT INTO `tbl_user`(`image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES ('$image','$fistName','$lastName','$dob','$gender','$role','$status','$email','$pws','$address')";
+                $image = time().basename($_FILES['txt_image']['name']);
+                $part = "images/userImage/".$image;
+                
+				 $insertSQL = "INSERT INTO `tbl_user`(`image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES ('$image','$fistName','$lastName','$dob','$gender','$role','$status','$email',MD5('$pws'),'$address')";
 					$runSQL = mysqli_query($conn,$insertSQL);
 					if($runSQL)
 					{
+                        
+                        move_uploaded_file($_FILES['txt_image']['tmp_name'],$part);
+                        $nw=50;
+                        $nh=50;
+                        $thumbnail = imagecreatetruecolor($nw,$nh);
+                        $source; //= imagecreatefromjpeg($part);
+                        if($imagetype == 'jpg' or $imagetype == 'jpeg')
+                        {
+                        $source = imagecreatefromjpeg($part);
+                        }
+                        elseif($imagetype == 'png')
+                        {
+                        $source = imagecreatefrompng($part);
+                        }
+                        list($w,$h,$t) = getimagesize($part);
+                        imagecopyresized($thumbnail,$source,0,0,0,0,$nw,$nh,$w,$h);
+                        imagejpeg($thumbnail,"images/userImage/thamnail/".$image);
+
 						$message =1;
 						$messageDialog = "User created is successfully...";
 					}

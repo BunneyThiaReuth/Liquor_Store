@@ -287,7 +287,7 @@
 								
 						 }
 					}
-					$sql = "UPDATE `tbl_user` SET `image`='$image',`fistName`='$fname',`lastName`='$lname',`dob`='$dob',`email`='$email',`password`='$password',`address`='$address' WHERE `id` = $id";
+					$sql = "UPDATE `tbl_user` SET `image`='$image',`fistName`='$fname',`lastName`='$lname',`dob`='$dob',`email`='$email',`password`=MD5('$password'),`address`='$address' WHERE `id` = $id";
 					$runsql = mysqli_query($conn,$sql);
 					if($runsql)
 					{
