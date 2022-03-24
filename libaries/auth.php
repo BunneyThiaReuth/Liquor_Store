@@ -24,6 +24,8 @@
             $_SESSION['img'] = $row['image'];
             $_SESSION['role'] = $row['role'];
             $_SESSION['userID'] = $row['id'];
+            $_SESSION['gender'] = $row['gender'];
+            $_SESSION['mail'] = $row['email'];
             $_SESSION['status'] = $row['status'];
             
             return true;

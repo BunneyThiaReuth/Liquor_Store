@@ -16,12 +16,23 @@ if(!isLogin())
 	<div class="row mt-4 w-100 container-fluid">
 	  <div class="col text-white">
 		  <div class="float-start mt-4">
-		  	<img src="../image/themnail/tmn_User/user.png" width="250px">
+		  	<img src="../images/userImage/<?=$_SESSION['img']?>" width="250px">
 		  </div>
 		  <div class="float-end mt-5">
-				<h4>Mr. Kheng</h4>
-				<h4>Male</h4>
-			  	<p>kheng@gmail.com</p>
+				<h4><?=$_SESSION['username']?></h4>
+				<h4>
+					<?php
+						if($_SESSION['gender'] == 0)
+						{
+							echo "Female";
+						}
+						else
+						{
+							echo "Male";
+						}
+					?>
+				</h4>
+			  	<p><?= $_SESSION['mail']?></p>
 				<h1 style="font-size: 30px"><strong>STOCK MANAGEMENT</strong></h1>
 		  </div>
 		  	
