@@ -104,6 +104,13 @@
                                         </span>
 									</a>
                                 </li>
+								<li class="sidebar-item">
+									<a href="listProducts.php?page=listProducts" class="sidebar-link">
+										<span class="hide-menu">
+											List Products
+                                        </span>
+									</a>
+                                </li>
                                 <li class="sidebar-item">
 									<a href="#" class="sidebar-link">
 										<span class="hide-menu"> 

@@ -315,3 +315,4 @@ include 'include/scriptFooter.php';
 </body>
 
 </html>
+<?php mysqli_close($conn)?>
