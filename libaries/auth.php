@@ -1,18 +1,21 @@
 <?php
-    function isLogin()
+    function isLogin($role)
     {
         session_start();
         if(isset($_SESSION['valid']) && $_SESSION['valid']=true)
         {
-            return true;
+            if($_SESSION['role']==$role)
+            {
+                return true;
+            }
         }
         return false;
     }
-    function checkUser($emai,$pwd,$role)
+    function checkUser($emai,$pwd)
     {
         include('../database/db_connection.php');
         $emai = trim($emai);
-        $result = "SELECT * FROM `tbl_user` WHERE lower(`email`) = lower('$emai') and `password` = MD5('$pwd') and `role` = '$role';";
+        $result = "SELECT * FROM `tbl_user` WHERE lower(`email`) = lower('$emai') and `password` = MD5('$pwd');";
         $runresult = mysqli_query($conn,$result);
         $numrow = mysqli_num_rows($runresult);
         if($numrow == 1)

@@ -1,6 +1,6 @@
 <?php
 include('../libaries/auth.php');
-if(!isLogin())
+if(!isLogin(2))
 {
 	header("location:../login/login.php?page=login");
 	exit();

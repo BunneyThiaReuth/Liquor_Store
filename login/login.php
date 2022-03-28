@@ -10,8 +10,7 @@
 			case 'login':
 				$email = $_POST['txt_email'];
 				$pwd = $_POST['txt_pwd'];
-				$role = $_POST['txt_role'];
-				$result = checkUser($email,$pwd,$role);
+				$result = checkUser($email,$pwd);
 				if($result)
 				{
 					switch ($_SESSION['role'])
@@ -112,15 +111,6 @@
 		  <div class="form-group">
 			<label for="pwd"><strong>Password:</strong></label>
 			<input type="password" name="txt_pwd" class="form-control" placeholder="Enter password" id="pwd" required>
-		  </div>
-		<div class="form-group">
-			<label for="pwd"><strong>User Role:</strong></label>
-			<select class="form-control" required name="txt_role">
-				<option>---Select---</option>
-				<option value='1'>Sale</option>
-				<option value='2'>Stock</option>
-				<option value='3'>Admin</option>
-			</select>
 		  </div>
 		  	<button type="submit" class="btn btn-primary w-25 mt-4">Login</button>
 			<button type="reset" class="btn btn-danger w-25 mt-4">Clear</button>

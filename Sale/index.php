@@ -1,63 +1,97 @@
 <?php
 include('../libaries/auth.php');
 include('../database/db_connection.php');
-if(!isLogin())
+$pID="";
+$pname = "";
+$price = "";
+$dis = "";
+$amount = "";
+
+$message =-1;
+$messageDialog ="";
+if(!isLogin(1))
 {
    header("location:../login/login.php?page=login");
    exit();
+}
+if(isset($_GET['cation']))
+{
+	$qty = $_POST['qty'];
+	if($qty > 0)
+	{
+		$action =$_GET['cation'];
+		switch($action){
+			case '1':
+					$pID = $_POST['pid'];
+					$pname = $_POST['pname'];
+					$price = $_POST['price'];
+					$dis = $_POST['disc'];
+					$amount = $_POST['amount'];
+				
+					if(isset($pID) && isset($pname) && isset($price) && isset($dis) && isset($amount))
+					{
+						$sql = "INSERT INTO `tbl_card`(`pid`, `name`, `price`, `qty`, `discount`, `amount`) VALUES ('$pID','$pname','$price','$qty','$dis','$amount');";
+						$runsql = mysqli_query($conn,$sql);
+						if($runsql)
+						{
+							$message =1;
+							$messageDialog ="Add to card is successfully ";
+						}
+						else{
+							$message =0;
+							$messageDialog ="Add to card is not successfully !";
+						}
+					}
+					else
+					{
+						$message =0;
+						$messageDialog ="Ohhop we have error please try again !";
+					}
+				break;
+			}
+	}
+	else
+	{
+		$message =0;
+		$messageDialog ="Quantity is invalid !";
+	}
+		
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" type="image/png" sizes="16x16" href="../assets/images/favicon.png">
-   <title>Liquor Store</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+	<?php include('include/head.php')?>
 </head>
 <body>
-
-<nav class="navbar fixed-top navbar-expand-sm bg-light navbar-light" style="box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;">
-  <div class="container">
-    <a class="navbar-brand" href="#">
-		<img src="../assets/images/logo-icon.png">
-		<strong>LIQUOR SORE</strong>
-	  </a>
-	  <div class="d-flex">
-	  	<div class="container-fluid">
-		<a class="navbar-brand" href="#">
-		  <img src="../images/userImage/thamnail/<?=$_SESSION['img']?>" alt="LIQUOR SORE" style="width:50px;border-radius: 10px"> 
-		</a>
-			<span class="navbar-text"><strong><?=$_SESSION['username']?></strong></span>
-	  </div>
-		<div class="dropdown mt-2">
-			<button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown">
-			  Action
-			</button>
-			<ul class="dropdown-menu">
-			  <li><a class="dropdown-item" href="#">
-				  <box-icon type='solid' name='user-detail'></box-icon>
-				  Profile
-				  </a>
-				</li>
-			  <li><a class="dropdown-item" href="../login/login.php?page=login&action=logout">
-				  <box-icon name='log-out-circle'></box-icon>
-				  LogOut
-				  </a>
-				</li>
-			</ul>
-  		</div>
-	</div>
-	  </div>
-  </div>
-</nav>
-
+<?php include('include/nav.php')?>
 <div class="container-fluid" style="margin-top:80px">
 	<div class="float-start" style="width: 68%;height: 100%">
 	<div class="mt-3">
+		<?php
+			if($message == 1)
+			{
+		?>
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+		  <strong>Messase !</strong> <?=$messageDialog?>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<?php
+			}
+			elseif($message ==0)
+			{
+		?>
+		<div class="alert alert-danger alert-dismissible fade show" role="alert">
+		 <strong>Messase !</strong> <?=$messageDialog?>
+		  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<?php
+			}
+		?>
 		<table id="prolist" class="table table-striped table-hover" style="width:100%">
         <thead>
             <tr class="text-center">
@@ -94,11 +128,55 @@ if(!isLogin())
 					</div>
 				</td>
 				<td class="text-center">
-					<a href="index.php?page=sale&action=1" class="btn btn-success" style="margin-top: 50%;box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;" >
+					<a href="#" class="btn btn-success" style="margin-top: 50%;box-shadow: rgba(0, 0, 0, 0.07) 0px 1px 1px, rgba(0, 0, 0, 0.07) 0px 2px 2px, rgba(0, 0, 0, 0.07) 0px 4px 4px, rgba(0, 0, 0, 0.07) 0px 8px 8px, rgba(0, 0, 0, 0.07) 0px 16px 16px;" data-toggle="modal" data-target="#addCardModalCenter<?=$rows['pid']?>">
 						<box-icon type='solid' name='cart-add' color='white' size='sm'></box-icon>Add
 					</a>
 				</td>
             </tr>
+	
+	<!-- CardModal -->
+	<div class="modal fade" id="addCardModalCenter<?=$rows['pid']?>" tabindex="-1" role="dialog" aria-labelledby="addCardModalCenter<?=$rows['pid']?>" aria-hidden="true">
+	  <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+		<div class="modal-content">
+		  <div class="modal-body">
+			  		<div class="card" style="width: 16.5rem;">
+					  <img class="card-img-top" width="180" height="250" src="../images/productsImage/<?=$rows['pimg']?>" alt="Card image cap">
+					  <div class="card-body">
+					<form method="post" enctype="multipart/form-data" action="index.php?page=sale&cation=1">
+						<div class="text-danger fw-bold">
+							<?php
+								$pID = $rows['pid'];
+								$pname = $rows['pnmae'];
+								$price = $rows['pprice'];
+								$dis = $rows['pdisc'];
+								$amount = number_format($rows['TotalDisc'],2);
+							?>
+							<label class="form-label">- Name : </label>
+							<input type="hidden" value="<?=$pID?>" name="pid" required>
+							<input type="text" value="<?=$pname?>" name="pname" disabled class="form-control" required>
+							<label class="form-label">- Price : $</label>
+							<input type="text" value="<?=$price?>" name="price" class="form-control" disabled required>
+							<label class="form-label">- Discount : %</label>
+							<input type="text" value="<?=$dis?>" name="disc" class="form-control" disabled required>
+						</div>
+						<div class="text-success fw-bold">
+							<label class="form-label">- Sale Price : $</label>
+							<input type="text" name="amount" value="<?=$amount?>" class="form-control" disabled required>
+							<label class="form-label">- Quantity: $</label>
+							<input type="number" placeholder="Quantity" name="qty" class="form-control" required>
+						</div>
+					<div class="mt-3 text-center">
+						<button  type="submit" class="btn btn-success" style="width: 45%">Add Card</button>
+						<button type="button" class="btn btn-danger" data-dismiss="modal" style="width: 45%">Close</button>
+					</div>
+			  </form>
+			</div>
+					
+		  </div>
+			  	
+		</div>
+	  </div>
+	</div>
 			<?php
 				
 				}
@@ -109,7 +187,7 @@ if(!isLogin())
 
 	</div>
 	</div>
-<div class="float-end" style="width:30%;height: 100%">
+	<div class="float-end" style="width:30%;height: 100%">	
 	<div class="text-center">
 		<h2><box-icon type='solid' name='cart-alt'></box-icon>Card</h2>
 		<div>
@@ -139,6 +217,7 @@ if(!isLogin())
 		  </table>
 		</div>
 	</div>
+</div>
 </div>
 </div>
 
