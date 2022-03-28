@@ -143,13 +143,14 @@
 				{
 					if(isset($_GET['img']))
 					{
-						$id = $_GET['id'];
-						$imagePath = $_GET['img'];
-						$path = "images/userImage/".$imagePath;
-						$paththumbnail = "images/userImage/thamnail/".$imagePath;
-						$trimpaththumbnail = trim($paththumbnail,"");
-						$trimpath = trim($path,"");
-						if(file_exists($trimpath) && file_exists($trimpaththumbnail))
+						
+					$id = $_GET['id'];
+					$imagePath = $_GET['img'];
+					$path = "images/userImage/".$imagePath;
+					$paththumbnail = "images/userImage/thamnail/".$imagePath;
+					$trimpaththumbnail = trim($paththumbnail);
+					$trimpath = trim($path);
+					if(file_exists($trimpath) && file_exists($trimpaththumbnail))
 						{
 							$sql ="DELETE FROM `tbl_user` WHERE `id`=$id";
 							$runsql = mysqli_query($conn,$sql);
@@ -166,41 +167,9 @@
 								$messageDailog = "User Deleted is not successfully...";
 							}
 						}
-						elseif(file_exists($trimpath) && !file_exists($trimpaththumbnail))
+					else
 						{
-							$sql ="DELETE FROM `tbl_user` WHERE `id`=$id";
-							$runsql = mysqli_query($conn,$sql);
-							if($runsql)
-							{
-								$message =1;
-								$messageDailog = "User Deleted is successfully...";
-								unlink($trimpath);
-							}
-							else
-							{
-								$message =0;
-								$messageDailog = "User Deleted is not successfully...";
-							}
-						}
-						elseif(!file_exists($trimpath) && file_exists($trimpaththumbnail))
-						{
-							$sql ="DELETE FROM `tbl_user` WHERE `id`=$id";
-							$runsql = mysqli_query($conn,$sql);
-							if($runsql)
-							{
-								$message =1;
-								$messageDailog = "User Deleted is successfully...";
-								unlink($trimpaththumbnail);
-							}
-							else
-							{
-								$message =0;
-								$messageDailog = "User Deleted is not successfully...";
-							}
-						}
-						else
-						{
-							$sql ="DELETE FROM `tbl_user` WHERE `id`=$id";
+							$sql ="DELETE FROM `tbl_user` WHERE `id`= $id";
 							$runsql = mysqli_query($conn,$sql);
 							if($runsql)
 							{
@@ -284,21 +253,22 @@
 							$trmpathThumbnail = trim($paththumbnail);
 							unlink($trmpath);
 							unlink($trmpathThumbnail);
+						}
+						 $sql = "UPDATE `tbl_user` SET `image`='$image',`fistName`='$fname',`lastName`='$lname',`dob`='$dob',`email`='$email',`password`='$password',`address`='$address' WHERE `id` = $id";
+							$runsql = mysqli_query($conn,$sql);
+							if($runsql)
+							{
+								$message=1;
+								$messageDailog = "User updated is successfully...";
 								
-						 }
+							}
+							else
+							{
+								$message=0;
+								$messageDailog = "User updated is not successfully...";
+							}
 					}
-					$sql = "UPDATE `tbl_user` SET `image`='$image',`fistName`='$fname',`lastName`='$lname',`dob`='$dob',`email`='$email',`password`=MD5('$password'),`address`='$address' WHERE `id` = $id";
-					$runsql = mysqli_query($conn,$sql);
-					if($runsql)
-					{
-						$message=1;
-						$messageDailog = "User updated is successfully...";
-					}
-					else
-					{
-						$message=0;
-						$messageDailog = "User updated is not successfully...";
-					}
+					
 				}
 				break;
 		}
@@ -434,7 +404,7 @@
 						</div>
 						<div class="mt-4">
 							<button type="submit" class="btn btn-primary w-25">Update</button>
-							<button type="reset" class="btn btn-danger w-25">Clear</button>
+							<a href="listUser.php?page=listUser" class="btn btn-dark w-25">Back</a>
 						</div>
 					</form>
 				</div>

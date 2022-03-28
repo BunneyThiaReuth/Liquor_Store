@@ -15,7 +15,7 @@
     {
         include('../database/db_connection.php');
         $emai = trim($emai);
-        $result = "SELECT * FROM `tbl_user` WHERE lower(`email`) = lower('$emai') and `password` = MD5('$pwd');";
+        $result = "SELECT * FROM `tbl_user` WHERE lower(`email`) = lower('$emai') and `password` = '$pwd';";
         $runresult = mysqli_query($conn,$result);
         $numrow = mysqli_num_rows($runresult);
         if($numrow == 1)
