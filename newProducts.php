@@ -3,7 +3,7 @@ include('libaries/auth.php');
 include('database/db_connection.php');
 $message =-1;
 $messageDialog="";
-if(!isLogin())
+if(!isLogin(3))
 {
 	header("location:login/login.php?page=login");
 	exit();
