@@ -207,22 +207,28 @@ if(isset($_GET['action']))
             <div class="page-breadcrumb">
                 <div class="row">
                     <div class="col-7 align-self-center">
-                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">LIST PRODUCT</h3>
+                        <h3 class="page-title text-truncate text-dark font-weight-medium mb-1">IMPOR STOCK</h3>
                         <div class="d-flex align-items-center">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0 p-0">
-                                        <li class="breadcrumb-item"><a href="category.php?page=category">Category</a>
                                         <li class="breadcrumb-item">
-										<a href="ListCategory.php?page=Listcategory">List Category</a>
+											<a href="category.php?page=category">Category</a>
+										</li>
                                         <li class="breadcrumb-item">
-										<a href="discount.php?page=discount">Discount</a>
+											<a href="ListCategory.php?page=Listcategory">List Category</a>
+										</li>
                                         <li class="breadcrumb-item">
-										<a href="lsitDiscount.php?page=lsitDiscount">List Discount</a>
+											<a href="discount.php?page=discount">Discount</a>
+										</li>
                                         <li class="breadcrumb-item">
-										<a href="newProducts.php?page=newProducts">New Product</a>
+											<a href="lsitDiscount.php?page=lsitDiscount">List Discount</a>
+										</li>
+                                        <li class="breadcrumb-item">
+											<a href="newProducts.php?page=newProducts">New Product</a>
+										</li>
 										<li class="breadcrumb-item">
-										<a href="listProducts.php?page=listProducts">list Product</a>
-                                    </li>
+											<a href="listProducts.php?page=listProducts">list Product</a>
+	                                    </li>
                                 </ol>
                             </nav>
                         </div>
@@ -368,7 +374,7 @@ if(isset($_GET['action']))
 								<th class="text-center">Action</th>
 							</tr>
 						</thead>
-						<tbody>
+						<tbody style="font-weight: bold">
 							<?php
 								$i=1;
 								$Sql = 'SELECT tbl_products.pro_id AS "pid", tbl_products.pro_image AS "pimg", tbl_products.pro_name AS "pnmae", tbl_category.name AS "cateName", tbl_products.pro_stock AS "pstock", tbl_products.pro_price AS "pprice",tbl_discount.discountPerent AS "pdisc",tbl_products.pro_price-(tbl_products.pro_price*tbl_discount.discountPerent/100) AS "TotalDisc", tbl_products.pro_date AS "pdate", tbl_products.pro_description As "pdesc", tbl_user.fistName As "ufname",tbl_user.lastName AS "ulname"
@@ -387,7 +393,23 @@ if(isset($_GET['action']))
 								</td>
 								<td><?=$rows['pnmae']?></td>
 								<td><?=$rows['cateName']?></td>
-								<td class="text-center"><?=$rows['pstock']?></td>
+								<td class="text-center">
+									<?php
+										$findstock = $rows['pstock'];
+										if($findstock >0 && $findstock<=5)
+										{
+											echo "<div class='btn btn-warning w-75'>$findstock</div>";
+										}
+										elseif($findstock == 0)
+										{
+											echo "<div class='btn btn-danger w-75'>$findstock</div>";
+										}
+										else
+										{
+											echo "<div class='btn btn-primary w-75'>$findstock</div>";
+										}
+									?>
+								</td>
 								<td class="text-center">$<?=$rows['pprice']?></td>
 								<td class="text-center"><?=$rows['pdisc']?>%</td>
 								<td class="text-center">

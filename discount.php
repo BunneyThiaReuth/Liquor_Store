@@ -38,12 +38,15 @@ if(!isLogin(3))
                         <div class="d-flex align-items-center">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb m-0 p-0">
-                                        <li class="breadcrumb-item"><a href="category.php?page=category">Category</a>
                                         <li class="breadcrumb-item">
-										<a href="ListCategory.php?page=Listcategory">List Category</a>
+											<a href="category.php?page=category">Category</a>
+										</li>
                                         <li class="breadcrumb-item">
-										<a href="discount.php?page=discount">Discount</a>
-                                    </li>
+											<a href="ListCategory.php?page=Listcategory">List Category</a>
+										</li>
+                                        <li class="breadcrumb-item">
+											<a href="discount.php?page=discount">Discount</a>
+                                    	</li>
                                 </ol>
                             </nav>
                         </div>

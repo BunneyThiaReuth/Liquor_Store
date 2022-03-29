@@ -112,9 +112,9 @@
 									</a>
                                 </li>
 								<li class="sidebar-item">
-									<a href="#" class="sidebar-link">
-										<span class="hide-menu"> 
-											Products OutStock
+									<a href="importStock.php?page=importStock" class="sidebar-link">
+										<span class="hide-menu">
+											Import Stock
                                         </span>
 									</a>
                                 </li>
