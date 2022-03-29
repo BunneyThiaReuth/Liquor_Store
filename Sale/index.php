@@ -14,22 +14,19 @@ if(isset($_GET['action']))
 	switch($action)
 	{
 		case '1':
-			if(isset($_POST['txt_qty'])  && $_POST['txt_qty'] > 0)
-			{
+
 				$pid = $_POST['txt_pid'];
 				$name = $_POST['txt_name'];
 				$price = $_POST['txt_price'];
-				$qty = $_POST['txt_qty'];
-				$discount = $_POST['txt_disc'];
-				$amount =$_POST['txt_amount'];
+				$amount = $_POST['txt_amount'];
 				$amount = number_format($amount,2);
-				$totalAmount = $amount * $qty;
-				$sql = "INSERT INTO `tbl_card`(`pid`, `name`, `price`, `qty`, `discount`, `amount`) VALUES ('$pid','$name','$price','$qty','$discount','$totalAmount')";
+				$qty = 1;
+				$sql = "INSERT INTO `tbl_card`(`pid`, `name`, `price`, `qty`,`amount`) VALUES ('$pid','$name','$price','$qty','$amount')";
 				$runsql = mysqli_query($conn,$sql);
 				if($runsql)
 				{
 					$message = 1;
-					$messageDialog ="Add to card is successfully !";
+					$messageDialog ="Add to card is successfully...";
 				}
 				else
 				{
@@ -37,13 +34,25 @@ if(isset($_GET['action']))
 					$messageDialog ="Add to card is not successfully !";
 				}
 				
-			}
-			else
-			{
-				$message =0;
-				$messageDialog ="Quantity invalid !";
-			}
 			
+			break;
+		case '2':
+			if(isset($_GET['id']))
+			{
+				$id = $_GET['id'];
+				$sql ="DELETE FROM `tbl_card` WHERE `id`=$id";
+				$runsql = mysqli_query($conn,$sql);
+				if($runsql)
+				{
+					$message = 1;
+					$messageDialog ="Deleted is successfully...";
+				}
+				else
+				{
+					$message = 0;
+					$messageDialog ="Deleted is not successfully !";
+				}
+			}
 			break;
 	}
 }
@@ -117,7 +126,6 @@ if(isset($_GET['action']))
 					- Sale Price : $<?=number_format($rows['TotalDisc'],2)?>
 					</div>
 					<form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=1">
-						<input type="number" name="txt_qty" class="form-control w-25 mt-2" placeholder="Quantity" required>
 				</td>
 				<?php
 					$proid = $rows['pid'];
@@ -148,24 +156,26 @@ if(isset($_GET['action']))
 
 	</div>
 	</div>
-	<div class="float-end" style="width:30%;height: 100%">	
+	<div class="float-end mt-3" style="width:31%;height: 100%">	
 	<div class="text-center">
 		<h2><box-icon type='solid' name='cart-alt'></box-icon>Card</h2>
 		<div>
-			<table class="table">
-			<thead>
-			  <tr>
+			<table class="table table-hover">
+			<thead class="bg-warning">
+
 				<th>Name</th>
 				<th>Price</th>
 				<th>QTY</th>
-				<th>Discount</th>
 				<th>Amount</th>
 				<th>Action</th>
-			  </tr>
+
 			</thead>
-			<tbody>
+			<tbody class="table-warning">
 				<?php
-					$getCard = "SELECT * FROM `tbl_card` ORDER BY `id` DESC";
+					$getCard = 'SELECT `id`, `pid`, `name`, `price`, sum(`qty`) as "qty", `amount` 
+					FROM `tbl_card`
+					GROUP BY `pid`
+					ORDER BY `id` DESC;';
 					$rungetCard = mysqli_query($conn,$getCard);
 					while($card = mysqli_fetch_array($rungetCard))
 					{
@@ -173,11 +183,14 @@ if(isset($_GET['action']))
 			  <tr>
 					<td><?=$card['name']?></td>
 				  	<td>$<?=$card['price']?></td>
-				  	<td><?=$card['qty']?></td>
-				  	<td><?=$card['discount']?>%</td>
+				  	<td>
+						<?=$card['qty']?>
+				  	</td>
 				  	<td><?=$card['amount']?></td>
 				<td>
-					<a href="#"><box-icon name='trash-alt' color='red'></box-icon></a>
+					<a href="index.php?page=sale&action=2&id=<?=$card['id']?>">
+						<box-icon name='trash'></box-icon>
+					</a>
 				</td>
 			  </tr>
 			<?php
@@ -188,28 +201,30 @@ if(isset($_GET['action']))
 		</div>
 	</div>
 		<?php
-			$sqlcalCard = "SELECT SUM(`price`*`qty`) AS total,sum(`amount`) AS smamount FROM `tbl_card`";
+			$sqlcalCard = "SELECT SUM(`price`*`qty`) AS total,SUM(`amount`) as amount FROM `tbl_card`";
 			$runcardsql = mysqli_query($conn,$sqlcalCard);
 			$calCard = mysqli_fetch_array($runcardsql);
 			$totalcard = $calCard['total'];
-			$totalpayment = $calCard['smamount'];
+			$totalpayment = $calCard['amount'];
 		?>
-		<div class="row mt-4 float-end">
+		<div class="row mt-1 fw-bold">
 			<div class="col">
 				<label>Grand Total :</label>
+				<input type="text" class="p-1 w-100" value="$<?=$totalcard?>" disabled>
 			</div>
-			<div class="col">
-				<input type="text" class="p-1" value="$<?=$totalcard?>" disabled>
-			</div>
-		</div>
-		<div class="row mt-2 float-end">
 			<div class="col">
 				<label>Total Payment :</label>
-			</div>
-			<div class="col">
-				<input type="text" class="p-1" value="$<?=$totalpayment?>" disabled>
+				<input type="text" class="p-1 w-100" value="$<?=$totalpayment?>" disabled>
 			</div>
 		</div>
+		<div class="mt-4">
+			<div class="row">
+				<div class="col">
+					<button type="button" class="btn btn-primary w-100">Payment</button>
+				</div>
+			</div>
+		</div>
+		
 </div>
 </div>
 </div>

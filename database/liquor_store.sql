@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 24, 2022 at 01:05 PM
+-- Generation Time: Mar 29, 2022 at 06:18 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.26
 
@@ -24,6 +24,23 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `tbl_card`
+--
+
+DROP TABLE IF EXISTS `tbl_card`;
+CREATE TABLE IF NOT EXISTS `tbl_card` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `pid` int DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `price` decimal(10,2) DEFAULT NULL,
+  `qty` int DEFAULT NULL,
+  `amount` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `tbl_category`
 --
 
@@ -34,7 +51,7 @@ CREATE TABLE IF NOT EXISTS `tbl_category` (
   `description` varchar(255) DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`cateId`)
-) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_category`
@@ -52,7 +69,8 @@ INSERT INTO `tbl_category` (`cateId`, `name`, `description`, `status`) VALUES
 (36, 'Pinot Noir', 'Lighter-bodied Red Wine', 1),
 (38, 'Sauvignon Blanc', 'Light- to Medium-Bodied White Wine', 1),
 (39, 'Pinot Gris', 'Light-Bodied White Wine', 1),
-(40, 'Riesling', 'Reese-ling', 1);
+(40, 'Riesling', 'Reese-ling', 1),
+(108, 'Red Wines', 'For Red wine', 1);
 
 -- --------------------------------------------------------
 
@@ -65,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `tbl_discount` (
   `disID` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
-  `discountPerent` decimal(10,2) NOT NULL,
+  `discountPerent` int NOT NULL,
   `startDate` date NOT NULL,
   `endDate` date NOT NULL,
   `status` int NOT NULL,
@@ -77,9 +95,38 @@ CREATE TABLE IF NOT EXISTS `tbl_discount` (
 --
 
 INSERT INTO `tbl_discount` (`disID`, `name`, `description`, `discountPerent`, `startDate`, `endDate`, `status`) VALUES
-(1, 'For Red wine', 'Red wine 10%', '10.00', '2022-03-01', '2022-03-05', 0),
-(2, 'No Discount', 'Of discount', '0.00', '2022-03-06', '2022-03-12', 1),
-(3, 'White Wines', 'White Wines 0.55%', '0.55', '2022-03-13', '2022-03-19', 0);
+(1, 'For Red wine', 'Red wine 10%', 10, '2022-03-01', '2022-03-05', 1),
+(2, 'No Discount', 'Of discount', 0, '2022-03-06', '2022-03-12', 1),
+(3, 'White Wines', 'White Wines 0.55%', 15, '2022-03-13', '2022-03-19', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_import`
+--
+
+DROP TABLE IF EXISTS `tbl_import`;
+CREATE TABLE IF NOT EXISTS `tbl_import` (
+  `impID` int NOT NULL AUTO_INCREMENT,
+  `date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `pid` int DEFAULT NULL,
+  `qty` varchar(255) DEFAULT NULL,
+  `userid` int DEFAULT NULL,
+  `desc` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`impID`),
+  KEY `pid_FK` (`pid`),
+  KEY `userId_FK` (`userid`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tbl_import`
+--
+
+INSERT INTO `tbl_import` (`impID`, `date`, `pid`, `qty`, `userid`, `desc`) VALUES
+(1, '2022-03-29', 10, '12', 46, 'up stock'),
+(3, '2022-03-29', 4, '15', 46, 'up stock'),
+(4, '2022-03-29', 9, '10', 46, 'up stock'),
+(5, '2022-03-29', 11, '10', 46, 'up stock');
 
 -- --------------------------------------------------------
 
@@ -89,19 +136,36 @@ INSERT INTO `tbl_discount` (`disID`, `name`, `description`, `discountPerent`, `s
 
 DROP TABLE IF EXISTS `tbl_products`;
 CREATE TABLE IF NOT EXISTS `tbl_products` (
-  `proID` int NOT NULL,
-  `image` varchar(255) DEFAULT NULL,
-  `cateID` int DEFAULT NULL,
-  `qty` int DEFAULT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `disID` int DEFAULT NULL,
-  `date` date DEFAULT NULL,
+  `pro_id` int NOT NULL AUTO_INCREMENT,
+  `pro_image` varchar(255) NOT NULL,
+  `pro_name` varchar(255) NOT NULL,
+  `cateID` int NOT NULL,
+  `pro_stock` int NOT NULL,
+  `pro_price` decimal(10,2) NOT NULL,
+  `pro_discount` int NOT NULL,
+  `pro_date` date NOT NULL,
+  `pro_description` varchar(255) NOT NULL,
   `userID` int NOT NULL,
-  PRIMARY KEY (`proID`),
+  PRIMARY KEY (`pro_id`),
   KEY `cate_FK` (`cateID`),
-  KEY `disc_FK` (`disID`),
+  KEY `discount_FK` (`pro_discount`),
   KEY `user_FK` (`userID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `tbl_products`
+--
+
+INSERT INTO `tbl_products` (`pro_id`, `pro_image`, `pro_name`, `cateID`, `pro_stock`, `pro_price`, `pro_discount`, `pro_date`, `pro_description`, `userID`) VALUES
+(2, '1648195460product661_1.jpg', 'Beringer - Main & Vine', 2, 12, '60.00', 2, '2022-03-25', 'Beringer - Main & Vine - Pinot Grigio | Californian White Wine on VivinoWine', 46),
+(3, '1648482419st_regis_chardonnay__02883.1343683816.jpg', 'St.Regis Chardonnay', 2, 15, '29.00', 2, '2022-03-25', 'St.Regis Chardonnay (Non-Alcoholic Wine), 25.4 Fl Oz', 31),
+(4, '16481960331353416_s.jpg', 'Kimberly Main & Vine', 2, 15, '25.00', 2, '2022-03-25', 'Kimberly, Vinegar Champagne, 12.7 Ounce', 31),
+(5, '1648204158product660_2.jpg', 'Beringer - Main & Vine', 35, 30, '18.00', 3, '2022-03-25', 'Manila Wine\r\nBeringer - Main & Vine - White Zinfandel | Californian Pink Wine', 31),
+(6, '16482213030008520000059_1_A1C1_0600.png', ' Meijer Sutter Home White', 35, 6, '8.00', 2, '2022-03-25', 'Meijer\r\nSutter Home White Zinfandel Wine, 1.5 lt', 46),
+(7, '1648221384product660_2 (1).jpg', 'Beringer - Main & Vine', 35, 22, '12.90', 3, '2022-03-25', 'Manila Wine\r\nBeringer - Main & Vine', 46),
+(9, '1648221525702812367692600-A.jpg', 'Beachfront White', 35, 10, '10.00', 1, '2022-03-25', 'ALDI UK\r\nBeachfront White', 46),
+(10, '1648221577Italian-Zinfandel-A.jpg', 'Italian Zinfandel', 35, 12, '13.00', 2, '2022-03-25', 'ALDI UK\r\nItalian Zinfandel', 46),
+(11, '1648221648asc.jpg', 'Hilmar Springs Zinfandel', 35, 10, '12.00', 1, '2022-03-25', 'Drink Supermarket Hilmar Springs Zinfandel', 46);
 
 -- --------------------------------------------------------
 
@@ -132,26 +196,31 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
 --
 
 INSERT INTO `tbl_user` (`id`, `image`, `fistName`, `lastName`, `dob`, `gender`, `role`, `status`, `email`, `password`, `address`) VALUES
-(18, '1647869892259897-sky-landscape.jpg', 'Lyna', 'Nita', '2000-04-12', 1, 1, 0, 'nita@gmail.com', 'e70b59714528d5798b1c8adaf0d0ed15', 'PP'),
-(19, '1647194166Penguins.jpg', 'Hong', 'Davit', '2000-01-22', 1, 1, 1, 'davit@gmail.com', 'aead07469380d05a0ce17d36503e7adb', 'PP'),
-(29, '1647421813employee wellness center_hero.jpg', 'Chong', 'Lina', '1998-10-02', 0, 2, 1, 'lina@gmail.com', 'f6f4deb7dad1c2e5e0b4d6569dc3c1c5', 'PP'),
-(30, '1647428298Max-R_Headshot (1).jpg', 'Leng', 'Dina', '1992-10-02', 1, 2, 1, 'dina@gmail.com', 'e274648aed611371cf5c30a30bbe1d65', 'PP'),
-(31, '1647428420d5jA8OZv.jpg', 'Seng', 'Dara', '1992-12-02', 1, 3, 0, 'dara@gmai.com', 'e5606dfd4d68db8b3d696d0b715892de', 'PP'),
-(32, '16474285204.jpg', 'Meng', 'kakNika', '1992-09-12', 0, 2, 1, 'kaknika@gmail.com', 'bba577da2b09f14ba9a32205a7ca05e6', 'ST'),
-(46, '16478554151.jpg', 'Bunney', 'ThiaReuth', '2000-09-20', 1, 3, 1, 'bunneythiareuth@gmail.com', '202cb962ac59075b964b07152d234b70', 'PP'),
-(47, '1647945189Hydrangeas.jpg', 'User', 'Admin', '2022-03-22', 1, 3, 1, 'admin@gmail.com', 'b433ce675b32a824e24d762ca0fa1ba9', 'PP');
+(19, '1647194166Penguins.jpg', 'Hong', 'Davit', '2000-01-22', 1, 1, 1, 'davit@gmail.com', 'davit', 'PP'),
+(29, '1647421813employee wellness center_hero.jpg', 'Chong', 'Lina', '1998-10-02', 0, 1, 1, 'lina@gmail.com', 'lina', 'PP'),
+(30, '1647428298Max-R_Headshot (1).jpg', 'Leng', 'Dina', '1992-10-02', 1, 2, 1, 'dina@gmail.com', 'dina', 'PP'),
+(31, '1647428420d5jA8OZv.jpg', 'Seng', 'Dara', '1992-12-02', 1, 3, 1, 'dara@gmai.com', 'dara', 'PP'),
+(32, '16474285204.jpg', 'Meng', 'kakNika', '1992-09-12', 0, 2, 1, 'kaknika@gmail.com', 'nika', 'ST'),
+(46, '16484874371.jpg', 'Bunney', 'ThiaReuth', '2000-09-20', 1, 3, 1, 'bunneythiareuth@gmail.com', '123', '#207,st2011, Phnom Penh');
 
 --
 -- Constraints for dumped tables
 --
 
 --
+-- Constraints for table `tbl_import`
+--
+ALTER TABLE `tbl_import`
+  ADD CONSTRAINT `pid_FK` FOREIGN KEY (`pid`) REFERENCES `tbl_products` (`pro_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `userId_FK` FOREIGN KEY (`userid`) REFERENCES `tbl_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+--
 -- Constraints for table `tbl_products`
 --
 ALTER TABLE `tbl_products`
   ADD CONSTRAINT `cate_FK` FOREIGN KEY (`cateID`) REFERENCES `tbl_category` (`cateId`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `disc_FK` FOREIGN KEY (`disID`) REFERENCES `tbl_discount` (`disID`),
-  ADD CONSTRAINT `user_FK` FOREIGN KEY (`userID`) REFERENCES `tbl_user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT;
+  ADD CONSTRAINT `discount_FK` FOREIGN KEY (`pro_discount`) REFERENCES `tbl_discount` (`disID`),
+  ADD CONSTRAINT `user_FK` FOREIGN KEY (`userID`) REFERENCES `tbl_user` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
