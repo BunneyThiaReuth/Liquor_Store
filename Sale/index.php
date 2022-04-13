@@ -10,6 +10,7 @@ date_default_timezone_set("Asia/Phnom_Penh");
 $t=strtotime("now");
 $message =-1;
 $messagedialog = "";
+
 if(isset($_GET['action']))
 {
 	$action = $_GET['action'];
@@ -25,10 +26,9 @@ if(isset($_GET['action']))
 				$invnum = $_POST['txt_invNum'];
 				$amount = number_format($amount,2);
 				$qty = $_POST['txt_qty'];
-
+				
 					$sql = "INSERT INTO `tbl_card`(`pid`, `name`, `price`, `qty`,`amount`,`ivnum`) VALUES ('$pid','$name','$price','$qty','$amount','$invnum')";
 					$runsql = mysqli_query($conn,$sql);
-
 			}
 			else
 			{
@@ -92,8 +92,9 @@ if(isset($_GET['action']))
 			break;
 		case '5':
 				$sql = 'INSERT INTO `tbl_invoicedetail`(`invNumber`, `proID`, `price`, `qty`, `amount`)
-				SELECT `ivnum`,`pid`, `price`, `qty`, `amount`*`qty` AS "amount"
-				FROM `tbl_card`;';
+				SELECT `ivnum`,`pid`, `amount`, sum(`qty`), sum(`amount`*`qty`) AS "amount"
+				FROM `tbl_card`
+				GROUP BY `pid`;';
 				$runsql = mysqli_query($conn,$sql);
 				if($runsql)
 				{
@@ -119,6 +120,26 @@ if(isset($_GET['action']))
 					$messagedialog = "Submit is not successfully !";
 				}
 			break;
+		case '6':
+			if(isset($_POST['txt_caninvNum']))
+			{
+				$deleteCard = "DELETE FROM tbl_card;";
+				$rundelete = mysqli_query($conn,$deleteCard);
+				if($rundelete)
+				{
+					$message =1;
+					$messagedialog = "Cancel successfully !";
+					$id = $_POST['txt_caninvNum'];
+					$deleteinv = "DELETE FROM `tbl_invoice` WHERE `invID`=$id";
+					mysqli_query($conn,$deleteinv);
+				}
+				else{
+					$message =0;
+					$messagedialog = "Fialed to cancel !";
+				}
+			}
+			
+			break;
 	}
 }
 ?>
@@ -129,10 +150,10 @@ if(isset($_GET['action']))
 </head>
 <body>
 <?php include('include/nav.php')?>
-<div class="container-fluid" style="margin-top:90px">
+<div class="container-fluid" style="margin-top:60px">
 
 	<div class="float-end" style="width: 58%;height: 100%">
-	<div class="mt-3">
+	<div class="mt-2">
 	<?php
 		if($message == 1)
 		{
@@ -161,14 +182,14 @@ if(isset($_GET['action']))
 		}
 	?>
 	<table id="prolist" class="table table-striped table-hover" style="width:100%">
-        <thead>
+        <thead class="bg-success text-white">
             <tr class="text-center">
                 <th>Image</th>
 				<th>Information</th>
 				<th>Action</th>
             </tr>
         </thead>
-        <tbody >
+        <tbody class="table-success">
 		<?php
 							$sql = 'SELECT tbl_products.pro_id AS "pid", tbl_products.pro_image AS "pimg", tbl_products.pro_name AS "pnmae", tbl_category.name AS "cateName", tbl_products.pro_stock AS "pstock", tbl_products.pro_price AS "pprice",tbl_discount.discountPerent AS "pdisc",tbl_products.pro_price-(tbl_products.pro_price*tbl_discount.discountPerent/100) AS "TotalDisc", tbl_products.pro_date AS "pdate", tbl_products.pro_description As "pdesc", tbl_user.fistName As "ufname",tbl_user.lastName AS "ulname"
 							FROM tbl_products
@@ -182,7 +203,7 @@ if(isset($_GET['action']))
 						?>
             <tr>
                 <td>
-					<img src="../images/productsImage/<?=$rows['pimg']?>" width="120" height="150">
+					<img src="../images/productsImage/<?=$rows['pimg']?>" alt="<?=$rows['pnmae']?>" class="rounded" style="margin-top: 20%" width="120" height="150">
 				</td>
 				<td>
 					<h4><?=$rows['pnmae']?></h4>
@@ -190,8 +211,21 @@ if(isset($_GET['action']))
 					<div class="text-danger">
 					- Price : $<?=$rows['pprice']?></br>
 					- Discount : <?=$rows['pdisc']?>%</br>
+					<?php
+						if($rows['pstock']== 0 && $rows['pstock']<=5)
+						{
+							echo("- QTY In Stock :".$rows['pstock']."</br>");
+						}
+					?>
+					
 					</div>
 					<div class="text-success fw-bold">
+					<?php
+						if($rows['pstock']>5)
+						{
+							echo("- QTY In Stock :".$rows['pstock']."</br>");
+						}
+					?>
 					- Sale Price : $<?=number_format($rows['TotalDisc'],2)?>
 					</div>
 					<form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=1">
@@ -241,18 +275,13 @@ if(isset($_GET['action']))
     </table>
 	</div>
 	</div>
-	<div style="width:41%;height:100%;">
-
-	<div>
-		<h4><box-icon type='solid' name='cart-alt'></box-icon>Card List</h4>
-		
+	<div class="fixed-top" style="width:40%;height:100%;margin-top: 5.3%;margin-left: 1%">
 		<div>
-			<table class="table table-hover ">
+			<table id="cartlist" class="table table-hover ">
 			<thead class="bg-warning text-center">
 
 				<th>Name</th>
 				<th>Price</th>
-				<th>Sale</th>
 				<th>QTY</th>
 				<th>Amount</th>
 				<th>Action</th>
@@ -260,8 +289,9 @@ if(isset($_GET['action']))
 			</thead>
 			<tbody class="table-warning">
 				<?php
-					$getCard = 'SELECT `id`, `pid`, `name`,`price`,`amount` as "saleprice", `qty` , `amount` * `qty` AS "amount"
+					$getCard = 'SELECT `id`, `pid`, `name`,`price`,`amount` as "saleprice", sum(`qty`) as "qty" , sum(`amount`*`qty`) as "amount"
 					FROM `tbl_card`
+					GROUP BY `pid`
 					ORDER BY `id` DESC;';
 					$rungetCard = mysqli_query($conn,$getCard);
 					while($card = mysqli_fetch_array($rungetCard))
@@ -269,7 +299,6 @@ if(isset($_GET['action']))
 				?>
 			  <tr>
 					<td><?=$card['name']?></td>
-				  	<td class="text-center">$<?=$card['price']?></td>
 				  	<td class="text-center">$<?=$card['saleprice']?></td>
 				  	<td class="text-center">
 						
@@ -310,39 +339,40 @@ if(isset($_GET['action']))
 					}
 			?>
 			</tbody>
+				<?php
+					$sqlcalCard = "SELECT SUM(`price`*`qty`) AS total,SUM(`amount`*`qty`) as amount FROM `tbl_card`";
+					$runcardsql = mysqli_query($conn,$sqlcalCard);
+					$calCard = mysqli_fetch_array($runcardsql);
+					$totalcard = $calCard['total'];
+					$totalpayment = $calCard['amount'];
+				?>
+				<tfoot>
+					<tr>
+						<td>Grand Total : $<?=$totalcard?></td>
+					</tr>
+					<tr>
+						<td>Payment : $<?=$totalpayment?></td>
+					</tr>
+				</tfoot>
 		  </table>
 		</div>
-	</div>
-		<?php
-			$sqlcalCard = "SELECT SUM(`price`*`qty`) AS total,SUM(`amount`*`qty`) as amount FROM `tbl_card`";
-			$runcardsql = mysqli_query($conn,$sqlcalCard);
-			$calCard = mysqli_fetch_array($runcardsql);
-			$totalcard = $calCard['total'];
-			$totalpayment = $calCard['amount'];
-		?>
-		<div class="row mt-1 fw-bold">
-			<div class="col">
-				<label>Grand Total :</label>
-				<input type="text" class="p-1 w-100" value="$<?=$totalcard?>" disabled>
-			</div>
-			<div class="col">
-				<label>Total Payment :</label>
-				<input type="text" class="p-1 w-100" value="$<?=$totalpayment?>" disabled>
-			</div>
-		</div>
-		<div class="mt-4">
+
+		<div class="mt-2">
 			<div class="row">
 				<div class="col">
-					<button type="button" class="btn btn-primary w-100">Payment</button>
+					<button type="button" class="btn btn-primary w-100">Print</button>
 				</div>
 				<div class="col">
-					<button type="button" class="btn btn-success w-100"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Invoice</button>
+					<button type="button" class="btn btn-success w-100"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Generate Invoice</button>
 				</div>
 			</div>
 		</div>
 		<div class="row mt-2">
 			<div class="col">
 				<button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#submitINVModal">Submit Invoice</button>
+			</div>
+			<div class="col">
+				<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#cancelINVModal"> Cancel</button>
 			</div>
 		</div>
 	<div class="mt-4">
@@ -351,15 +381,16 @@ if(isset($_GET['action']))
 			<thead class="bg-primary text-white">
 				<th class="text-center">#Ref.no</th>
 				<th class="text-center">Date</th>
-				<th class="text-center">User</th>
+				<th class="text-center">Total</th>
 				<th class="text-center">Status</th>
 				<th class="text-center">Note</th>
 			</thead>
 			<tbody class="table-primary">
 				<?php
-					$sqlgetinv = 'SELECT tbl_invoice.invID AS "invID", tbl_invoice.invNumber AS "invNum", tbl_invoice.Date AS "date", tbl_user.fistName AS "fuser",tbl_user.lastName AS "luser",tbl_invoice.status AS "status",tbl_invoice.not AS "not"
+					$sqlgetinv = 'SELECT tbl_invoice.invID AS "invID", tbl_invoice.invNumber AS "invNum", tbl_invoice.Date AS "date", sum(tbl_invoicedetail.amount) as "total",tbl_invoice.status AS "status",tbl_invoice.not AS "not"
 					FROM tbl_invoice
-					INNER JOIN tbl_user ON tbl_invoice.userID = tbl_user.id;';
+					INNER JOIN tbl_invoicedetail ON tbl_invoice.invNumber = tbl_invoicedetail.invNumber
+					GROUP BY tbl_invoice.invNumber;';
 					 $runsqlgetinv = mysqli_query($conn,$sqlgetinv);
 					 while($getinv = mysqli_fetch_array($runsqlgetinv))
 					 {
@@ -367,7 +398,7 @@ if(isset($_GET['action']))
 				<tr>
 					<td>#<?=$getinv['invNum']?></td>
 					<td><?=$getinv['date']?></td>
-					<td><?=$getinv['fuser']." ".$getinv['luser']?></td>
+					<td>$<?=$getinv['total']?></td>
 					<td class="text-center">
 						<?php
 							if($getinv['status']==0)
@@ -389,8 +420,20 @@ if(isset($_GET['action']))
 				?>
 			</tbody>
 		</table>
+		<div class="mt-2">
+			<div class="row">
+				<div class="col">
+					<button type="button" class="btn btn-primary w-100">View Invoice</button>
+				</div>
+				<div class="col">
+					<button type="button" class="btn btn-success w-100">View InvoiceDetail</button>
+				</div>
+			</div>
+		</div>
 	</div>
+		
 	<div class="mt-4">
+		<h4>#Invoice Detail</h4>
 		<table id="invDetail" class="table table-hover" style="width: 100%">
 			<thead class="text-center bg-success text-white">
 				<th>Ivoice</th>
@@ -401,9 +444,10 @@ if(isset($_GET['action']))
 			</thead>
 			<tbody class="table-success">
 				<?php
-					$sqlinvoicDetail = 'SELECT tbl_invoicedetail.invNumber AS "invNumber", tbl_products.pro_name AS "proname", tbl_invoicedetail.price AS "price", tbl_invoicedetail.qty AS "qty", tbl_invoicedetail.amount AS "amount"
+					$sqlinvoicDetail = 'SELECT tbl_invoicedetail.invNumber AS "invNumber",tbl_products.pro_name AS "proname", tbl_invoicedetail.price AS "price", tbl_invoicedetail.qty AS "qty", tbl_invoicedetail.amount AS "amount"
 					FROM `tbl_invoicedetail`
-					INNER JOIN `tbl_products` ON tbl_invoicedetail.proID = tbl_products.pro_id;';
+					INNER JOIN `tbl_products` ON tbl_invoicedetail.proID = tbl_products.pro_id';
+				
 					$runsqlinvoicDetail = mysqli_query($conn,$sqlinvoicDetail);
 					while($getrowsIVNDetail = mysqli_fetch_array($runsqlinvoicDetail))
 					{
@@ -411,9 +455,9 @@ if(isset($_GET['action']))
 				<tr>
 					<td>#<?=$getrowsIVNDetail['invNumber']?></td>
 					<td><?=$getrowsIVNDetail['proname']?></td>
-					<td><?=$getrowsIVNDetail['price']?></td>
+					<td>$<?=$getrowsIVNDetail['price']?></td>
 					<td><?=$getrowsIVNDetail['qty']?></td>
-					<td><?=$getrowsIVNDetail['amount']?></td>
+					<td>$<?=$getrowsIVNDetail['amount']?></td>
 				</tr>
 			<?php
 					}
@@ -425,14 +469,15 @@ if(isset($_GET['action']))
 </div>
 </div>
 <!-- Modal submit vin -->
-<div class="modal fade" id="submitINVModal" tabindex="-1" role="dialog" aria-labelledby="submitINVModal" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content alert-warning">
+<div class="modal fade" id="submitINVModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="submitINVModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-center">
+    <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="submitINVModal">Confirm Message</h5>
       </div>
-      <div class="modal-body">
-		 <form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=5">
+	
+      <div class="modal-body p-2">
+	  <form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=5">
 		<select class="form-control" name="txt_upinvNum" required>
 				<option value="">--select Invoice--</option>
 					<?php
@@ -447,8 +492,41 @@ if(isset($_GET['action']))
 						?>
 			</select>
 			 <div class="modal-footer">
-		 		<button type="submit" class="btn btn-primary w-25">Submit</button>
-        		<button type="button" class="btn btn-secondary w-25" data-dismiss="modal">Close</button>
+		 		<button type="submit" class="btn btn-primary">Submit</button>
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      		</div>
+		 </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal cancel vin -->
+<div class="modal fade" id="cancelINVModal" tabindex="-1" role="dialog" aria-labelledby="cancelINVModal" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content alert-warning">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelINVModal">Your Message</h5>
+      </div>
+      <div class="modal-body">
+		Are you sure to cancel this cart ?
+		<form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=6">
+		<select class="form-control mt-3" name="txt_caninvNum" required>
+				<option value="">--select Invoice--</option>
+					<?php
+						$csqlgetinvnumup = "SELECT * FROM `tbl_invoice` WHERE `status` =0 ORDER BY `invID` DESC";
+						$crunsqlgetinvnumup = mysqli_query($conn,$csqlgetinvnumup);
+						while($cgetinvnumup = mysqli_fetch_array($crunsqlgetinvnumup))
+						{
+						?>
+						<option value="<?=$cgetinvnumup['invID']?>">#<?=$cgetinvnumup['invNumber'].".(".$cgetinvnumup['not'].")"?></option>
+						<?php
+						}
+						?>
+			</select>
+			 <div class="modal-footer">
+		 		<button type="submit" class="btn btn-primary">Submit</button>
+        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       		</div>
 		 </form>
       </div>
@@ -456,7 +534,6 @@ if(isset($_GET['action']))
     </div>
   </div>
 </div>
-
 <!-- Modal INV -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-center">
@@ -503,6 +580,11 @@ $(document).ready(function() {
 <script>
 $(document).ready(function() {
     $('#invDetail').DataTable();
+} );
+</script>
+<script>
+$(document).ready(function() {
+    $('#cartlist').DataTable();
 } );
 </script>
 <script>
