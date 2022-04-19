@@ -17,18 +17,34 @@ if(isset($_GET['action']))
 	switch($action)
 	{
 		case '1':
-			if(isset($_POST['txt_qty']) && $_POST['txt_qty'] > 0)
+			if(isset($_POST['max_qty']) && $_POST['max_qty']>=$_POST['txt_qty'])
 			{
-				$pid = $_POST['txt_pid'];
-				$name = $_POST['txt_name'];
-				$price = $_POST['txt_price'];
-				$amount = $_POST['txt_amount'];
-				$invnum = $_POST['txt_invNum'];
-				$amount = number_format($amount,2);
-				$qty = $_POST['txt_qty'];
-				
-					$sql = "INSERT INTO `tbl_card`(`pid`, `name`, `price`, `qty`,`amount`,`ivnum`) VALUES ('$pid','$name','$price','$qty','$amount','$invnum')";
-					$runsql = mysqli_query($conn,$sql);
+				$maxQTy = $_POST['max_qty'];
+			
+				if(isset($_POST['txt_qty']) && $_POST['txt_qty'] > 0)
+				{
+					$pid = $_POST['txt_pid'];
+					$name = $_POST['txt_name'];
+					$price = $_POST['txt_price'];
+					$amount = $_POST['txt_amount'];
+					$invnum = $_POST['txt_invNum'];
+					$amount = number_format($amount,2);
+					$qty = $_POST['txt_qty'];
+
+						$sql = "INSERT INTO `tbl_card`(`pid`, `name`, `price`, `qty`,`amount`,`ivnum`) VALUES ('$pid','$name','$price','$qty','$amount','$invnum');";
+						$runsql = mysqli_query($conn,$sql);
+					$getupdate = "SELECT  `pro_stock`-$qty as 'pro_stock' FROM `tbl_products` WHERE `pro_id` = $pid;";
+					$rungetupdate = mysqli_query($conn,$getupdate);
+					$getvalue = mysqli_fetch_array($rungetupdate);
+					$update = $getvalue['pro_stock'];
+					$sqlup = "UPDATE `tbl_products` SET `pro_stock`='$update' WHERE `pro_id` = $pid;";
+					mysqli_query($conn,$sqlup);
+				}
+				else
+				{
+					$message =0;
+					$messagedialog = "Quantity invalid !";
+				}
 			}
 			else
 			{
@@ -105,7 +121,7 @@ if(isset($_GET['action']))
 					if(isset($_POST['txt_upinvNum']) && $_POST['txt_upinvNum'] !="")
 					{
 						$invnumberup = $_POST['txt_upinvNum'];
-						$updateInv = "UPDATE `tbl_invoice` SET `status`='1' WHERE `invNumber` = $invnumberup";
+						$updateInv = "UPDATE `tbl_invoice` SET `status`='0' WHERE `invNumber` = $invnumberup";
 						mysqli_query($conn,$updateInv);
 					}
 					else
@@ -211,27 +227,34 @@ if(isset($_GET['action']))
 					<div class="text-danger">
 					- Price : $<?=$rows['pprice']?></br>
 					- Discount : <?=$rows['pdisc']?>%</br>
-					<?php
-						if($rows['pstock']== 0 && $rows['pstock']<=5)
-						{
-							echo("- QTY In Stock :".$rows['pstock']."</br>");
-						}
-					?>
 					
 					</div>
-					<div class="text-success fw-bold">
 					<?php
-						if($rows['pstock']>5)
+						if($rows['pstock']>=5)
 						{
-							echo("- QTY In Stock :".$rows['pstock']."</br>");
+					?>
+					<div class="text-success fw-bold">
+					- In Stock : (<?=$rows['pstock']?>)</br>
+					</div>
+					<?php
+						}
+						elseif($rows['pstock']<5)
+						{
+					?>
+					<div class="text-danger fw-bold">
+					- In Stock : (<?=$rows['pstock']?>)</br>
+					</div>
+					<?php
 						}
 					?>
+					<div class="text-success fw-bold">
 					- Sale Price : $<?=number_format($rows['TotalDisc'],2)?>
 					</div>
 					<form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=1">
 					<div class="row">
 						<div class="col">
-							<input type="number" name="txt_qty" class="form-control" placeholder="Quantity" required>
+							<input type="hidden" name="max_qty" value="<?=$rows['pstock']?>">
+							<input type="number" value="0" name="txt_qty" class="form-control" placeholder="Quantity" required>
 						</div>
 						<div class="col">
 								<select class="form-control" name="txt_invNum" required>
@@ -360,10 +383,10 @@ if(isset($_GET['action']))
 		<div class="mt-2">
 			<div class="row">
 				<div class="col">
-					<button type="button" class="btn btn-primary w-100">Print</button>
+					<button type="button" class="btn btn-success w-100"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Generate Invoice</button>
 				</div>
 				<div class="col">
-					<button type="button" class="btn btn-success w-100"  data-bs-toggle="modal" data-bs-target="#staticBackdrop">Generate Invoice</button>
+					<a class="btn btn-primary w-100" href="listINV.php?page=invoice">Invoices</a>
 				</div>
 			</div>
 		</div>
@@ -375,96 +398,6 @@ if(isset($_GET['action']))
 				<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#cancelINVModal"> Cancel</button>
 			</div>
 		</div>
-	<div class="mt-4">
-		<h4>#Invoice</h4>
-		<table id="inv" class="table table-hover" style="width: 100%">
-			<thead class="bg-primary text-white">
-				<th class="text-center">#Ref.no</th>
-				<th class="text-center">Date</th>
-				<th class="text-center">Total</th>
-				<th class="text-center">Status</th>
-				<th class="text-center">Note</th>
-			</thead>
-			<tbody class="table-primary">
-				<?php
-					$sqlgetinv = 'SELECT tbl_invoice.invID AS "invID", tbl_invoice.invNumber AS "invNum", tbl_invoice.Date AS "date", sum(tbl_invoicedetail.amount) as "total",tbl_invoice.status AS "status",tbl_invoice.not AS "not"
-					FROM tbl_invoice
-					INNER JOIN tbl_invoicedetail ON tbl_invoice.invNumber = tbl_invoicedetail.invNumber
-					GROUP BY tbl_invoice.invNumber;';
-					 $runsqlgetinv = mysqli_query($conn,$sqlgetinv);
-					 while($getinv = mysqli_fetch_array($runsqlgetinv))
-					 {
-				?>
-				<tr>
-					<td>#<?=$getinv['invNum']?></td>
-					<td><?=$getinv['date']?></td>
-					<td>$<?=$getinv['total']?></td>
-					<td class="text-center">
-						<?php
-							if($getinv['status']==0)
-							{
-								
-								echo "<box-icon type='solid' name='checkbox-minus'></box-icon>";
-							}
-						 else{
-							 echo "<box-icon type='solid' name='checkbox-checked'></box-icon>";
-						 }
-						?>
-					</td>
-					<td>
-						<?=$getinv['not']?>
-					</td>
-				</tr>
-			<?php
-					 }
-				?>
-			</tbody>
-		</table>
-		<div class="mt-2">
-			<div class="row">
-				<div class="col">
-					<button type="button" class="btn btn-primary w-100">View Invoice</button>
-				</div>
-				<div class="col">
-					<button type="button" class="btn btn-success w-100">View InvoiceDetail</button>
-				</div>
-			</div>
-		</div>
-	</div>
-		
-	<div class="mt-4">
-		<h4>#Invoice Detail</h4>
-		<table id="invDetail" class="table table-hover" style="width: 100%">
-			<thead class="text-center bg-success text-white">
-				<th>Ivoice</th>
-				<th>Prodcuts</th>
-				<th>Price</th>
-				<th>QTY</th>
-				<th>Amount</th>
-			</thead>
-			<tbody class="table-success">
-				<?php
-					$sqlinvoicDetail = 'SELECT tbl_invoicedetail.invNumber AS "invNumber",tbl_products.pro_name AS "proname", tbl_invoicedetail.price AS "price", tbl_invoicedetail.qty AS "qty", tbl_invoicedetail.amount AS "amount"
-					FROM `tbl_invoicedetail`
-					INNER JOIN `tbl_products` ON tbl_invoicedetail.proID = tbl_products.pro_id';
-				
-					$runsqlinvoicDetail = mysqli_query($conn,$sqlinvoicDetail);
-					while($getrowsIVNDetail = mysqli_fetch_array($runsqlinvoicDetail))
-					{
-				?>
-				<tr>
-					<td>#<?=$getrowsIVNDetail['invNumber']?></td>
-					<td><?=$getrowsIVNDetail['proname']?></td>
-					<td>$<?=$getrowsIVNDetail['price']?></td>
-					<td><?=$getrowsIVNDetail['qty']?></td>
-					<td>$<?=$getrowsIVNDetail['amount']?></td>
-				</tr>
-			<?php
-					}
-				?>
-			</tbody>
-		</table>
-	</div>
 </div>
 </div>
 </div>
@@ -572,16 +505,7 @@ $(document).ready(function() {
     $('#prolist').DataTable();
 } );
 </script>
-<script>
-$(document).ready(function() {
-    $('#inv').DataTable();
-} );
-</script>
-<script>
-$(document).ready(function() {
-    $('#invDetail').DataTable();
-} );
-</script>
+
 <script>
 $(document).ready(function() {
     $('#cartlist').DataTable();

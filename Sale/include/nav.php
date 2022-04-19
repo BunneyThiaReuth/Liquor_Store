@@ -1,10 +1,11 @@
 <nav class="navbar fixed-top navbar-expand-sm bg-light navbar-light" style="box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;">
   <div class="container-fluid">
-    <a class="navbar-brand ">
+    <a class="navbar-brand " href="index.php">
 		<img src="../assets/images/logo-icon.png" style="width:35px;"> 
 		<strong class="text-primary">LIQ</strong><strong class="text-success">UOR</strong> <strong class="text-danger">STOR</strong>
 	  </a>
-	  <div class="d-flex">
+
+	  <div class="d-flex justify-content-end">
 		  <strong>Today is :<?=" ".date("d-M-Y")?></strong>
 	  </div>
 	  <div class="dropdown dropstart ">

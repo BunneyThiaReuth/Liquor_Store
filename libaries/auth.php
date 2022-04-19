@@ -24,6 +24,8 @@
             session_start();
             $_SESSION['valid'] = true;
             $_SESSION['username'] = $row['fistName']." ".$row['lastName'];
+			$_SESSION['fistName'] = $row['fistName'];
+			$_SESSION['lastName'] = $row['lastName'];
             $_SESSION['img'] = $row['image'];
             $_SESSION['role'] = $row['role'];
             $_SESSION['userID'] = $row['id'];

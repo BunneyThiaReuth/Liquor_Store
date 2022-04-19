@@ -14,13 +14,6 @@
 						</li>
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Applications</span></li>
-						
-                        <li class="sidebar-item"> 
-							<a class="sidebar-link sidebar-link" href="#" aria-expanded="false">
-								<i data-feather="message-square" class="feather-icon"></i>
-								<span class="hide-menu">Message</span>
-							</a>
-						</li>
 						<li class="sidebar-item"> 
 							<a class="sidebar-link sidebar-link" href="#" aria-expanded="false">
 								<i data-feather="server" class="feather-icon"></i>
@@ -44,16 +37,23 @@
                             <ul aria-expanded="false" class="collapse  first-level base-level-line">
 								
                                 <li class="sidebar-item">
-									<a href="#" class="sidebar-link">
+									<a href="invoice.php?page=invoice" class="sidebar-link">
 										<span class="hide-menu">
-											List Invoice
+											Invoice
                                         </span>
 									</a>
                                 </li>
                                 <li class="sidebar-item">
-									<a href="#" class="sidebar-link">
+									<a href="invdetail.php?page=invdetail" class="sidebar-link">
 										<span class="hide-menu">
 											Invoice Detail
+                                        </span>
+									</a>
+                                </li>
+								<li class="sidebar-item">
+									<a href="InvoiceUnavailable.php?page=InvoiceUnavailable" class="sidebar-link">
+										<span class="hide-menu">
+											Invoice Unavailable
                                         </span>
 									</a>
                                 </li>
