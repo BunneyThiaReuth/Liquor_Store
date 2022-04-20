@@ -21,8 +21,8 @@ if(isset($_GET['action']))
 				$qty = $_POST['txt_qty'];
 				$desc = $_POST['txt_desc'];
 				$user = $_SESSION['userID'];
-				
-				$insersql = "INSERT INTO `tbl_import`(`date`, `pid`, `qty`, `userid`, `desc`) VALUES ('$date','$id','$qty','$user','$desc')";
+				$price = $_POST['txt_price'];
+				$insersql = "INSERT INTO `tbl_import`(`date`, `pid`,`price`, `qty`, `userid`, `desc`) VALUES ('$date','$id','$price','$qty','$user','$desc')";
 				$runsqlinser = mysqli_query($conn,$insersql);
 				if($runsqlinser)
 				{
@@ -46,7 +46,8 @@ if(isset($_GET['action']))
 				$qty = $_POST['txt_upqty'];
 				$desc = $_POST['txt_updesc'];
 				$user = $_SESSION['userID'];
-				$sql = "UPDATE `tbl_import` SET `date`='$date',`qty`='$qty',`userid`='$user',`desc`='$desc' WHERE `impID` =$upbyID";
+				$price = $_POST['txt_upprice'];
+				$sql = "UPDATE `tbl_import` SET `date`='$date',`price`='$price',`qty`='$qty',`userid`='$user',`desc`='$desc' WHERE `impID` =$upbyID";
 				$runsql = mysqli_query($conn,$sql);
 				if($runsql)
 				{
@@ -198,6 +199,22 @@ if(isset($_GET['action']))
 							<label class="form-label">Quantity:</label>
 							<input type="text" name="txt_qty" class="form-control" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;" placeholder="Enter Quantity">
 						</div>
+						<div class="col">
+							<label class="form-label">Price:</label>
+							<input type="text" list="price_list" name="txt_price" class="form-control" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;" placeholder="Enter Price" autocomplete="off">
+							<datalist id="price_list">
+								<?php
+									$getpprice = "SELECT  `pro_price` FROM `tbl_products`;";
+									$rungetpprice = mysqli_query($conn,$getpprice);
+									while($getrowsprice = mysqli_fetch_array($rungetpprice))
+									{
+								?>
+								<option value="<?=$getrowsprice['pro_price']?>">
+								<?php
+									}
+								?>
+							</datalist>
+						</div>
 					</div>
 						<div class="row mt-3">
 							<div class="col">
@@ -216,7 +233,9 @@ if(isset($_GET['action']))
 						<thead class="text-center">
 							<th>#No</th>
 							<th>Products Name</th>
+							<th>Price</th>
 							<th>Quantity</th>
+							<th>Total</th>
 							<th>Date</th>
 							<th>Description</th>
 							<th>User</th>
@@ -225,7 +244,7 @@ if(isset($_GET['action']))
 						<tbody>
 							<?php
 							$i=1;
-								$sqlgetrow = 'SELECT tbl_import.impID as "impID",tbl_import.date As "date",tbl_products.pro_name as "pname",tbl_products.pro_id as "pid",tbl_import.qty as "qty",tbl_user.fistName AS "userfname",tbl_user.lastName as "userlname",tbl_import.desc As "desc"
+								$sqlgetrow = 'SELECT tbl_import.impID as "impID",tbl_import.date As "date",tbl_products.pro_name as "pname",tbl_products.pro_id as "pid",tbl_import.price as "price",tbl_import.qty as "qty",tbl_import.price*tbl_import.qty as "total",tbl_user.fistName AS "userfname",tbl_user.lastName as "userlname",tbl_import.desc As "desc"
 								FROM tbl_import
 								INNER JOIN tbl_products ON tbl_import.pid = tbl_products.pro_id
 								INNER JOIN tbl_user ON tbl_import.userid = tbl_user.id;';
@@ -236,8 +255,15 @@ if(isset($_GET['action']))
 							<tr>
 								<td class="text-center"><?=$i?></td>
 								<td><?=$getrows['pname']?></td>
+								<td>$<?=$getrows['price']?></td>
 								<td class="text-center"><?=$getrows['qty']?></td>
-								<td class="text-center"><?=$getrows['date']?></td>
+								<td class="text-center">$<?= number_format($getrows['total'],2)?></td>
+								<td class="text-center">
+									<?php
+										$date = date_create($getrows['date']);
+										echo date_format($date,'d-M-Y');
+									?>
+								</td>
 								<td><?=$getrows['desc']?></td>
 								<td class="text-center"><?=$getrows['userfname'].' '.$getrows['userlname']?></td>
 								<td class="text-center">
@@ -285,6 +311,10 @@ if(isset($_GET['action']))
 						<div class="col">
 							<label class="form-label">Quantity:</label>
 							<input type="text" name="txt_upqty" value="<?=$getrows['qty']?>" class="form-control" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;" placeholder="Enter Quantity">
+						</div>
+					<div class="col">
+							<label class="form-label">Price:</label>
+							<input type="text" name="txt_upprice" value="<?=$getrows['price']?>" class="form-control" required style="box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;" placeholder="Enter Price">
 						</div>
 					</div>
 						<div class="row mt-3">

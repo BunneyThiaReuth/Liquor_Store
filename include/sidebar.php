@@ -14,18 +14,6 @@
 						</li>
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Applications</span></li>
-						<li class="sidebar-item"> 
-							<a class="sidebar-link sidebar-link" href="#" aria-expanded="false">
-								<i data-feather="server" class="feather-icon"></i>
-								<span class="hide-menu">Bank</span>
-							</a>
-						</li>
-						<li class="sidebar-item"> 
-							<a class="sidebar-link sidebar-link" href="#" aria-expanded="false">
-								<i data-feather="bar-chart" class="feather-icon"></i>
-								<span class="hide-menu">Cash</span>
-							</a>
-						</li>
 						
 						<li class="sidebar-item">
 							<a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
@@ -122,6 +110,7 @@
                             </ul>
                         </li>
 
+<!--
                         <li class="sidebar-item">
 							<a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
 								<i data-feather="bar-chart" class="feather-icon"></i>
@@ -146,6 +135,7 @@
                                 </li>
                             </ul>
                         </li>
+-->
 						<li class="sidebar-item"> 
 							<a class="sidebar-link sidebar-link" href="user.php?page=user" aria-expanded="false">
 								<i data-feather="user" class="feather-icon"></i>
@@ -158,14 +148,6 @@
 								<span class="hide-menu">List User</span>
 							</a>
 						</li>
-						
-						<li class="sidebar-item"> 
-							<a class="sidebar-link sidebar-link" href="#" aria-expanded="false">
-								<i data-feather="credit-card" class="feather-icon"></i>
-								<span class="hide-menu">Balance</span>
-							</a>
-						</li>
-
                         <li class="list-divider"></li>
                         <li class="nav-small-cap"><span class="hide-menu">Authentication</span></li>
 
