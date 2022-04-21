@@ -1,57 +1,19 @@
-
-<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-		<img src="../assets/images/logo-icon.png" alt="Avatar Logo" style="width:30px;"> 
-		<strong>LIQUOR</strong> STORE
-	  </a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse p-2" id="collapsibleNavbar">
-      <ul class="navbar-nav">
-		  <box-icon name='home' color='white' class="mt-2"></box-icon>
-        <li class="nav-item me-2">
-          <a class="nav-link active" href="#">Home</a>
-        </li>
-		  <box-icon name='chart' color='white' class="mt-2"></box-icon>
-		  <li class="nav-item me-2">
-          <a class="nav-link" href="#">Message <span class="badge bg-primary">14</span></a>
-        </li>
-		  <box-icon name='bookmark-plus' color='white' class="mt-2"></box-icon>
-        <li class="nav-item me-2">
-          <a class="nav-link" href="#">Category</a>
-        </li>
-		  <box-icon type='solid' name='shopping-bags' color='white' class="mt-2"></box-icon>
-		  <li class="nav-item me-2">
-          <a class="nav-link" href="#">New Product</a>
-        </li>
-		  <box-icon name='archive-out' color='white' class="mt-2"></box-icon>
-        <li class="nav-item me-2">
-          <a class="nav-link" href="#">OutStock <span class="badge bg-warning">20</span></a>
-        </li>
-		  <box-icon name='archive-in' color='white' class="mt-2"></box-icon>
-		  <li class="nav-item me-2">
-          <a class="nav-link" href="#">Import</a>
-        </li>
-		  </li>
-		<box-icon name='receipt' color='white' class="mt-2"></box-icon>
-		  <li class="nav-item me-2">
-          	<a class="nav-link" href="#">List Import</a>
-        	</li>
-		<box-icon name='printer' color='white' class="mt-2"></box-icon>
-		<li class="nav-item me-2">
-          	<a class="nav-link" href="#">Report</a>
-        	</li>
-		<box-icon name='user' color='white' class="mt-2"></box-icon>
-        <li class="nav-item dropdown me-2">
-          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">User</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#"><box-icon name='user'></box-icon>Profile</a></li>
-            <li><a class="dropdown-item" href="../login/login.php?page=login&action=logout"><box-icon name='log-out-circle'></box-icon> LogOut</a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
+        <a class="navbar-brand brand-logo me-5" href="index.php"><img src="../assets/images/logo-icon.png" alt="logo"/ style="width: 40px"></a>
+		  <a class="navbar-brand brand-logo-mini" href="index.php"><img src="../assets/images/logo-icon.png" alt="logo"/ style="width: 40px"></a>
+      </div>
+      <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+          <span class="ti-view-list"></span>
+        </button>
+        <ul class="navbar-nav nav-profile navbar-nav-right">
+			<li class="nav-item nav-profile dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" id="profileDropdown">
+              <img src="../images/userImage/<?=$_SESSION['img']?>" alt="profile"/>
+				<span><?=$_SESSION['username']?></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>

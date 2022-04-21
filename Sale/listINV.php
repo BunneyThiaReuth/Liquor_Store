@@ -366,7 +366,7 @@ background:#eee;
 		<h4 class="text-center">#Invoice Detail</h4>
 		<table id="invDetail" class="table table-hover" style="width: 100%">
 			<thead class="text-center bg-success text-white">
-				<th>Ivoice</th>
+				<th>Invoice</th>
 				<th>Prodcuts</th>
 				<th>Price</th>
 				<th>QTY</th>
