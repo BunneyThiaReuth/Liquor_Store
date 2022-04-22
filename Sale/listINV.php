@@ -16,7 +16,7 @@ if(isset($_GET['action']))
 			{
 				$inv = $_GET['inv'];
 				$not = $_GET['not'];
-				$sql = "SELECT tbl_invoicedetail.invNumber AS 'invNumber',tbl_products.pro_name AS 'proname', tbl_invoicedetail.price AS 'price', tbl_invoicedetail.qty AS 'qty', tbl_invoicedetail.amount AS 'amount'
+				$sql = "SELECT tbl_invoicedetail.invNumber AS 'invNumber',tbl_products.pro_id as 'id',tbl_products.pro_name AS 'proname', tbl_invoicedetail.price AS 'price', tbl_invoicedetail.qty AS 'qty', tbl_invoicedetail.amount AS 'amount'
 				FROM `tbl_invoicedetail` INNER JOIN `tbl_products` ON tbl_invoicedetail.proID = tbl_products.pro_id WHERE invNumber = $inv GROUP BY tbl_invoicedetail.proID;";
 				$runsql = mysqli_query($conn,$sql);
 				$findtotal ="SELECT sum(`amount`) as 'grantotal',SUM(`price`*`qty`) as 'subtotal' FROM `tbl_invoicedetail` WHERE invNumber = $inv;";

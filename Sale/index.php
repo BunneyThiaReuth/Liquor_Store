@@ -58,6 +58,15 @@ if(isset($_GET['action']))
 				$id = $_GET['id'];
 				$sql ="DELETE FROM `tbl_card` WHERE `id`=$id";
 				$runsql = mysqli_query($conn,$sql);
+				$stock =$_GET['stock'];
+				$proid = $_GET['proid'];
+				$getqtypro = "SELECT `pro_stock` FROM `tbl_products` WHERE `pro_id` = $proid";
+				$runsqlgetqty = mysqli_query($conn,$getqtypro);
+				$data = mysqli_fetch_array($runsqlgetqty);
+				$upqty = $data['pro_stock']+$stock;					
+				$updatesql = "UPDATE `tbl_products` SET `pro_stock`='$upqty' WHERE `pro_id` =$proid";
+				mysqli_query($conn,$updatesql);
+				
 			}
 			break;
 		case '3':
@@ -65,15 +74,40 @@ if(isset($_GET['action']))
 				{
 					$id = $_GET['id'];
 					$qty = $_POST['txt_upaty'];
-					$qtyapp = $_POST['txt_qtyapp'];
-					if($qty != $qtyapp )
+					$qtyapp = $_POST['txt_oldqty'];
+					$pid = $_POST['pid'];
+					if($qty != $qtyapp && $qty>0)
 					{
 						$sql = "UPDATE `tbl_card` SET `qty`='$qty' WHERE `id` = $id";
 						$runsql = mysqli_query($conn,$sql);
 						if($runsql)
 						{
+							$total = $qty - $qtyapp;
 							$message =1;
-							$messagedialog = "Quantity updated is successfully...";
+							if($qty > $qtyapp)
+							{
+								$getqtypro = "SELECT `pro_stock` FROM `tbl_products` WHERE `pro_id` = $pid";
+								$runsqlgetqty = mysqli_query($conn,$getqtypro);
+								$data = mysqli_fetch_array($runsqlgetqty);
+								
+								$upqty = ($data['pro_stock']+$qtyapp)-$qty;
+								
+								$updatesql = "UPDATE `tbl_products` SET `pro_stock`='$upqty' WHERE `pro_id` =$pid";
+								mysqli_query($conn,$updatesql);
+								$messagedialog = "Quantity updated is successfully...";
+							}
+							else
+							{
+								$getqtypro = "SELECT `pro_stock` FROM `tbl_products` WHERE `pro_id` = $pid";
+								$runsqlgetqty = mysqli_query($conn,$getqtypro);
+								$data = mysqli_fetch_array($runsqlgetqty);
+								$oldstock = $data['pro_stock'];
+								$upnumber = $oldstock+$qtyapp-$qty;
+								$updatesql = "UPDATE `tbl_products` SET `pro_stock`='$upnumber' WHERE `pro_id` =$pid";
+								mysqli_query($conn,$updatesql);
+								$messagedialog = "Quantity updated is successfully...";
+							}
+								
 						}
 						else
 						{
@@ -88,7 +122,6 @@ if(isset($_GET['action']))
 					
 				}
 			break;
-			
 		case '4':
 			$date = date("Y-m-d");
 			$invNumber = $t;
@@ -129,7 +162,6 @@ if(isset($_GET['action']))
 						$message =0;
 						$messagedialog = "Submit is not successfully !";
 					}
-					
 				}
 				else{
 					$message =0;
@@ -144,14 +176,15 @@ if(isset($_GET['action']))
 				if($rundelete)
 				{
 					$message =1;
-					$messagedialog = "Cancel successfully !";
+					$messagedialog = "Distroy successfully !";
 					$id = $_POST['txt_caninvNum'];
+					
 					$deleteinv = "DELETE FROM `tbl_invoice` WHERE `invID`=$id";
 					mysqli_query($conn,$deleteinv);
 				}
 				else{
 					$message =0;
-					$messagedialog = "Fialed to cancel !";
+					$messagedialog = "Fialed to Distroy !";
 				}
 			}
 			
@@ -324,15 +357,15 @@ if(isset($_GET['action']))
 					<td><?=$card['name']?></td>
 				  	<td class="text-center">$<?=$card['saleprice']?></td>
 				  	<td class="text-center">
-						
 						<?php
 							if(isset($_GET['action']) && $_GET['action'] == 'edit' && $_GET['editID'] == $card['id'])
 							{
 						?>
 						<form enctype="multipart/form-data" method="post" action="index.php?page=sale&action=3&id=<?=$card['id']?>">
-							<input type="hidden" value="<?=$card['qty']?>" name="txt_qtyapp">
+							<input type="hidden" value="<?=$card['qty']?>" name="txt_oldqty">
+							<input type="hidden" value="<?=$card['pid']?>" name="pid">
 							<div class="input-group mb-3">
-							  <input type="number" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2" value="<?=$card['qty']?>" name="txt_upaty" required>
+							  <input type="number" class="form-control" value="<?=$card['qty']?>" name="txt_upaty" required>
 							  <div class="input-group-append">
 								<button class="btn btn-outline-secondary" type="submit">Save</button>
 							  </div>
@@ -350,7 +383,7 @@ if(isset($_GET['action']))
 				  	</td>
 				  	<td class="text-center"><?=$card['amount']?></td>
 				<td class="text-center">
-					<a href="index.php?page=sale&action=2&id=<?=$card['id']?>">
+					<a href="index.php?page=sale&action=2&stock=<?=$card['qty']?>&id=<?=$card['id']?>&proid=<?=$card['pid']?>">
 						<box-icon name='trash'></box-icon>
 					</a>
 					<a href="index.php?page=sale&action=edit&editID=<?=$card['id']?>">
@@ -395,7 +428,7 @@ if(isset($_GET['action']))
 				<button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#submitINVModal">Submit Invoice</button>
 			</div>
 			<div class="col">
-				<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#cancelINVModal"> Cancel</button>
+				<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#cancelINVModal"> Distroy</button>
 			</div>
 		</div>
 </div>
@@ -416,6 +449,7 @@ if(isset($_GET['action']))
 					<?php
 						$sqlgetinvnumup = "SELECT * FROM `tbl_invoice` WHERE `status` =0 ORDER BY `invID` DESC";
 						$runsqlgetinvnumup = mysqli_query($conn,$sqlgetinvnumup);
+						
 						while($getinvnumup = mysqli_fetch_array($runsqlgetinvnumup))
 						{
 						?>
@@ -447,7 +481,7 @@ if(isset($_GET['action']))
 		<select class="form-control mt-3" name="txt_caninvNum" required>
 				<option value="">--select Invoice--</option>
 					<?php
-						$csqlgetinvnumup = "SELECT * FROM `tbl_invoice` WHERE `status` =0 ORDER BY `invID` DESC";
+						$csqlgetinvnumup = "SELECT * FROM `tbl_invoice` WHERE `status` = 0 ORDER BY `invID` DESC";
 						$crunsqlgetinvnumup = mysqli_query($conn,$csqlgetinvnumup);
 						while($cgetinvnumup = mysqli_fetch_array($crunsqlgetinvnumup))
 						{
@@ -494,7 +528,6 @@ if(isset($_GET['action']))
     </div>
   </div>
 </div>
-
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.0.1/css/bootstrap.min.css">
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"> 
 <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>

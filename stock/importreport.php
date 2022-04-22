@@ -155,7 +155,10 @@ $runsqlgetdate = mysqli_query($conn,$sqlgetdate);
                   <h4 class="card-title">Import</h4>
                   <div class="table-responsive">
 					 <!-- Button trigger modal -->
-					<button type="button" class="btn btn-primary mb-2 float-end" data-toggle="modal" data-target="#print">
+					 <form method="post" action="exportimport.php">
+					  	<input type="submit" name="btn_export" value="Excel" class="btn btn-primary float-end ml-2">
+					  </form>
+					<button type="button" class="btn btn-success mb-2 float-end" data-toggle="modal" data-target="#print">
 					  Print
 					</button>
 

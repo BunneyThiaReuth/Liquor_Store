@@ -16,6 +16,7 @@
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item"> <a class="nav-link" href="INVreport.php?page=InvoiceReport">Invoice Report</a></li>
                 <li class="nav-item"> <a class="nav-link" href="importreport.php?page=importreport">Import</a></li>
+                <li class="nav-item"> <a class="nav-link" href="prolist.php?page=prolist">Products</a></li>
               </ul>
             </div>
           </li>
