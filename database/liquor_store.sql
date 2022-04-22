@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 01, 2022 at 05:35 PM
+-- Generation Time: Apr 22, 2022 at 05:19 PM
 -- Server version: 8.0.27
 -- PHP Version: 7.4.26
 
@@ -34,10 +34,10 @@ CREATE TABLE IF NOT EXISTS `tbl_card` (
   `name` varchar(255) DEFAULT NULL,
   `price` decimal(10,2) DEFAULT NULL,
   `qty` int DEFAULT NULL,
-  `amount` decimal(10,2) DEFAULT NULL,
+  `amount` decimal(10,2) NOT NULL,
   `ivnum` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=143 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=238 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- --------------------------------------------------------
 
@@ -52,14 +52,14 @@ CREATE TABLE IF NOT EXISTS `tbl_category` (
   `description` varchar(255) DEFAULT NULL,
   `status` int DEFAULT NULL,
   PRIMARY KEY (`cateId`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_category`
 --
 
 INSERT INTO `tbl_category` (`cateId`, `name`, `description`, `status`) VALUES
-(2, 'White Wines', 'New Import', 1),
+(2, 'White Wines', 'White Wines', 1),
 (3, 'Rosé Wines', 'New Stock', 0),
 (4, 'Sparkling Wines', 'New Stock', 1),
 (5, 'Dessert Wines', 'New Stock', 0),
@@ -71,7 +71,8 @@ INSERT INTO `tbl_category` (`cateId`, `name`, `description`, `status`) VALUES
 (38, 'Sauvignon Blanc', 'Light- to Medium-Bodied White Wine', 1),
 (39, 'Pinot Gris', 'Light-Bodied White Wine', 1),
 (40, 'Riesling', 'Reese-ling', 1),
-(108, 'Red Wines', 'For Red wine', 1);
+(108, 'Red Wines', 'For Red wine', 1),
+(110, 'Rosé Wines', 'Rosé Wines', 1);
 
 -- --------------------------------------------------------
 
@@ -89,7 +90,7 @@ CREATE TABLE IF NOT EXISTS `tbl_discount` (
   `endDate` date NOT NULL,
   `status` int NOT NULL,
   PRIMARY KEY (`disID`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_discount`
@@ -98,7 +99,8 @@ CREATE TABLE IF NOT EXISTS `tbl_discount` (
 INSERT INTO `tbl_discount` (`disID`, `name`, `description`, `discountPerent`, `startDate`, `endDate`, `status`) VALUES
 (1, 'For Red wine', 'Red wine 10%', 10, '2022-03-01', '2022-03-05', 1),
 (2, 'No Discount', 'Of discount', 0, '2022-03-06', '2022-03-12', 1),
-(3, 'White Wines', 'White Wines 0.55%', 15, '2022-03-13', '2022-03-19', 1);
+(3, 'White Wines', 'White Wines 0.55%', 15, '2022-03-13', '2022-03-19', 1),
+(11, 'Rosé Wines', 'Rosé Wines', 20, '2022-04-22', '2022-04-30', 1);
 
 -- --------------------------------------------------------
 
@@ -111,23 +113,27 @@ CREATE TABLE IF NOT EXISTS `tbl_import` (
   `impID` int NOT NULL AUTO_INCREMENT,
   `date` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pid` int DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
   `qty` varchar(255) DEFAULT NULL,
   `userid` int DEFAULT NULL,
   `desc` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`impID`),
   KEY `pid_FK` (`pid`),
   KEY `userId_FK` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_import`
 --
 
-INSERT INTO `tbl_import` (`impID`, `date`, `pid`, `qty`, `userid`, `desc`) VALUES
-(1, '2022-03-29', 10, '12', 46, 'up stock'),
-(3, '2022-03-29', 4, '15', 46, 'up stock'),
-(4, '2022-03-29', 9, '10', 46, 'up stock'),
-(5, '2022-03-29', 11, '10', 46, 'up stock');
+INSERT INTO `tbl_import` (`impID`, `date`, `pid`, `price`, `qty`, `userid`, `desc`) VALUES
+(1, '2022-03-29', 10, '13.00', '12', 30, 'up stock'),
+(3, '2022-03-29', 4, '25.00', '15', 46, 'up stock'),
+(4, '2022-03-29', 9, '10.00', '30', 30, 'up stock'),
+(5, '2022-03-29', 11, '12.00', '10', 46, 'up stock'),
+(6, '2022-04-20', 12, '19.00', '20', 46, 'up stock'),
+(7, '2022-04-21', 4, '25.00', '120', 30, 'up stock'),
+(8, '2022-04-22', 2, '60.00', '76', 46, 'up stock');
 
 -- --------------------------------------------------------
 
@@ -146,16 +152,17 @@ CREATE TABLE IF NOT EXISTS `tbl_invoice` (
   PRIMARY KEY (`invID`),
   UNIQUE KEY `invNumber` (`invNumber`),
   KEY `userInv_FK` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_invoice`
 --
 
 INSERT INTO `tbl_invoice` (`invID`, `invNumber`, `Date`, `userID`, `status`, `not`) VALUES
-(3, 1648798764, '2022-04-01', 19, 1, 'not1'),
-(7, 1648833974, '2022-04-02', 19, 1, 'not2'),
-(8, 1648834264, '2022-04-02', 19, 1, 'not3');
+(21, 1650267640, '2022-04-18', 19, 1, 'not1'),
+(23, 1650341825, '2022-04-19', 19, 1, 'not2'),
+(30, 1650618296, '2022-04-22', 19, 1, 'not3'),
+(35, 1650647686, '2022-04-23', 19, 1, 'not4');
 
 -- --------------------------------------------------------
 
@@ -174,21 +181,23 @@ CREATE TABLE IF NOT EXISTS `tbl_invoicedetail` (
   PRIMARY KEY (`invDetailID`),
   KEY `proID_FK` (`proID`),
   KEY `invumber_FK` (`invNumber`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_invoicedetail`
 --
 
 INSERT INTO `tbl_invoicedetail` (`invDetailID`, `invNumber`, `proID`, `price`, `qty`, `amount`) VALUES
-(19, 1648798764, 2, '60.00', 2, '120.00'),
-(20, 1648798764, 3, '29.00', 2, '58.00'),
-(22, 1648833974, 2, '60.00', 2, '120.00'),
-(23, 1648833974, 5, '18.00', 2, '30.60'),
-(24, 1648833974, 10, '13.00', 4, '52.00'),
-(25, 1648834264, 13, '29.00', 3, '78.30'),
-(26, 1648834264, 3, '29.00', 3, '87.00'),
-(27, 1648834264, 5, '18.00', 3, '45.90');
+(62, 1650267640, 2, '60.00', 2, '120.00'),
+(63, 1650267640, 3, '29.00', 2, '58.00'),
+(67, 1650341825, 2, '60.00', 3, '180.00'),
+(68, 1650341825, 11, '10.80', 3, '32.40'),
+(79, 1650618296, 2, '60.00', 3, '180.00'),
+(80, 1650618296, 3, '29.00', 2, '58.00'),
+(85, 1650647686, 2, '60.00', 2, '120.00'),
+(86, 1650647686, 3, '29.00', 3, '87.00'),
+(87, 1650647686, 6, '8.00', 5, '40.00'),
+(88, 1650647686, 11, '10.80', 3, '32.40');
 
 -- --------------------------------------------------------
 
@@ -212,24 +221,25 @@ CREATE TABLE IF NOT EXISTS `tbl_products` (
   KEY `cate_FK` (`cateID`),
   KEY `discount_FK` (`pro_discount`),
   KEY `user_FK` (`userID`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_products`
 --
 
 INSERT INTO `tbl_products` (`pro_id`, `pro_image`, `pro_name`, `cateID`, `pro_stock`, `pro_price`, `pro_discount`, `pro_date`, `pro_description`, `userID`) VALUES
-(2, '1648195460product661_1.jpg', 'Beringer - Main & Vine', 2, 12, '60.00', 2, '2022-03-25', 'Beringer - Main & Vine - Pinot Grigio | Californian White Wine on VivinoWine', 46),
-(3, '1648482419st_regis_chardonnay__02883.1343683816.jpg', 'St.Regis Chardonnay', 2, 15, '29.00', 2, '2022-03-25', 'St.Regis Chardonnay (Non-Alcoholic Wine), 25.4 Fl Oz', 31),
-(4, '16481960331353416_s.jpg', 'Kimberly Main & Vine', 2, 15, '25.00', 2, '2022-03-25', 'Kimberly, Vinegar Champagne, 12.7 Ounce', 31),
-(5, '1648204158product660_2.jpg', 'Beringer - Main & Vine', 35, 30, '18.00', 3, '2022-03-25', 'Manila Wine\r\nBeringer - Main & Vine - White Zinfandel | Californian Pink Wine', 31),
-(6, '16482213030008520000059_1_A1C1_0600.png', ' Meijer Sutter Home White', 35, 6, '8.00', 2, '2022-03-25', 'Meijer\r\nSutter Home White Zinfandel Wine, 1.5 lt', 46),
-(7, '1648221384product660_2 (1).jpg', 'Beringer - Main & Vine', 35, 22, '12.90', 3, '2022-03-25', 'Manila Wine\r\nBeringer - Main & Vine', 46),
-(9, '1648221525702812367692600-A.jpg', 'Beachfront White', 35, 10, '10.00', 1, '2022-03-25', 'ALDI UK\r\nBeachfront White', 46),
+(2, '1648195460product661_1.jpg', 'Beringer - Main & Vine', 2, 74, '60.00', 2, '2022-03-25', 'Beringer - Main & Vine - Pinot Grigio | Californian White Wine on VivinoWine', 46),
+(3, '1648482419st_regis_chardonnay__02883.1343683816.jpg', 'St.Regis Chardonnay', 2, 114, '29.00', 2, '2022-03-25', 'St.Regis Chardonnay (Non-Alcoholic Wine), 25.4 Fl Oz', 31),
+(4, '16481960331353416_s.jpg', 'Kimberly Main & Vine', 2, 120, '25.00', 2, '2022-03-25', 'Kimberly, Vinegar Champagne, 12.7 Ounce', 31),
+(5, '1648204158product660_2.jpg', 'Beringer - Main & Vine', 35, 24, '18.00', 3, '2022-03-25', 'Manila Wine\r\nBeringer - Main & Vine - White Zinfandel | Californian Pink Wine', 31),
+(6, '16482213030008520000059_1_A1C1_0600.png', ' Meijer Sutter Home White', 35, 1, '8.00', 2, '2022-03-25', 'Meijer\r\nSutter Home White Zinfandel Wine, 1.5 lt', 46),
+(7, '1648221384product660_2 (1).jpg', 'Beringer - Main & Vine', 35, 20, '12.90', 3, '2022-03-25', 'Manila Wine\r\nBeringer - Main & Vine', 46),
+(9, '1648221525702812367692600-A.jpg', 'Beachfront White', 35, 30, '10.00', 1, '2022-03-25', 'ALDI UK\r\nBeachfront White', 46),
 (10, '1648221577Italian-Zinfandel-A.jpg', 'Italian Zinfandel', 35, 12, '13.00', 2, '2022-03-25', 'ALDI UK\r\nItalian Zinfandel', 46),
-(11, '1648221648asc.jpg', 'Hilmar Springs Zinfandel', 35, 10, '12.00', 1, '2022-03-25', 'Drink Supermarket Hilmar Springs Zinfandel', 46),
-(12, '1648743861scarlett-dark-red-wine-blend-xl-blog0316.jpg', 'Their Sweet Red Wine Blends', 108, 12, '19.00', 1, '2022-03-31', 'Americans Sure Do Love Their Sweet Red Wine Blends | Food & Wine', 46),
-(13, '1648743945U0e4624d0f13b4f7bb67916b643709b9eO.jpg', 'Italian Red Wine Merlot 750 Ml', 108, 21, '29.00', 1, '2022-03-31', 'Alibaba\r\nItalian Red Wine Merlot 750 Ml', 46);
+(11, '1648221648asc.jpg', 'Hilmar Springs Zinfandel', 35, 7, '12.00', 1, '2022-03-25', 'Drink Supermarket Hilmar Springs Zinfandel', 46),
+(12, '1648743861scarlett-dark-red-wine-blend-xl-blog0316.jpg', 'Their Sweet Red Wine Blends', 108, 20, '19.00', 1, '2022-03-31', 'Americans Sure Do Love Their Sweet Red Wine Blends | Food & Wine', 46),
+(13, '1650553860Italian-Zinfandel-A.jpg', 'Italian Red Wine Merlot 750 Ml', 108, 21, '29.00', 1, '2022-03-31', 'Alibaba\r\nItalian Red Wine Merlot 750 Ml', 46),
+(14, '1650646230U0e4624d0f13b4f7bb67916b643709b9eO.jpg', 'Classic Red Wine Trio', 110, 200, '25.00', 11, '2022-04-22', 'Classic Red Wine Trio', 46);
 
 -- --------------------------------------------------------
 
@@ -253,7 +263,7 @@ CREATE TABLE IF NOT EXISTS `tbl_user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `password` (`password`),
   KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `tbl_user`
@@ -264,8 +274,9 @@ INSERT INTO `tbl_user` (`id`, `image`, `fistName`, `lastName`, `dob`, `gender`, 
 (29, '1647421813employee wellness center_hero.jpg', 'Chong', 'Lina', '1998-10-02', 0, 1, 1, 'lina@gmail.com', 'lina', 'PP'),
 (30, '1647428298Max-R_Headshot (1).jpg', 'Leng', 'Dina', '1992-10-02', 1, 2, 1, 'dina@gmail.com', 'dina', 'PP'),
 (31, '1647428420d5jA8OZv.jpg', 'Seng', 'Dara', '1992-12-02', 1, 3, 1, 'dara@gmai.com', 'dara', 'PP'),
-(32, '16474285204.jpg', 'Meng', 'kakNika', '1992-09-12', 0, 2, 1, 'kaknika@gmail.com', 'nika', 'ST'),
-(46, '16484874371.jpg', 'Bunney', 'ThiaReuth', '2000-09-20', 1, 3, 1, 'bunneythiareuth@gmail.com', '123', '#207,st2011, Phnom Penh');
+(32, '16474285204.jpg', 'Meng', 'kakNika', '1992-09-12', 0, 2, 0, 'kaknika@gmail.com', 'nika', 'ST'),
+(46, '16484874371.jpg', 'Bunney', 'ThiaReuth', '2000-09-20', 1, 3, 1, 'bunneythiareuth@gmail.com', '123', '#207,st2011, Phnom Penh'),
+(54, '1650646668Koala.jpg', 'Chong', 'Na', '2000-01-22', 0, 1, 1, 'chongna@gmail.com', '826d8b5f5719d34a7c5a57a8ce368a64', 'PP Cambodia');
 
 --
 -- Constraints for dumped tables
