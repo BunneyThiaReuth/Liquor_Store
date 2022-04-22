@@ -168,27 +168,6 @@ if(isset($_GET['action']))
 					$messagedialog = "Submit is not successfully !";
 				}
 			break;
-		case '6':
-			if(isset($_POST['txt_caninvNum']))
-			{
-				$deleteCard = "DELETE FROM tbl_card;";
-				$rundelete = mysqli_query($conn,$deleteCard);
-				if($rundelete)
-				{
-					$message =1;
-					$messagedialog = "Distroy successfully !";
-					$id = $_POST['txt_caninvNum'];
-					
-					$deleteinv = "DELETE FROM `tbl_invoice` WHERE `invID`=$id";
-					mysqli_query($conn,$deleteinv);
-				}
-				else{
-					$message =0;
-					$messagedialog = "Fialed to Distroy !";
-				}
-			}
-			
-			break;
 	}
 }
 ?>
@@ -427,9 +406,6 @@ if(isset($_GET['action']))
 			<div class="col">
 				<button type="button" class="btn btn-dark w-100" data-toggle="modal" data-target="#submitINVModal">Submit Invoice</button>
 			</div>
-			<div class="col">
-				<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#cancelINVModal"> Distroy</button>
-			</div>
 		</div>
 </div>
 </div>
@@ -464,40 +440,6 @@ if(isset($_GET['action']))
       		</div>
 		 </form>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal cancel vin -->
-<div class="modal fade" id="cancelINVModal" tabindex="-1" role="dialog" aria-labelledby="cancelINVModal" aria-hidden="true">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content alert-warning">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancelINVModal">Your Message</h5>
-      </div>
-      <div class="modal-body">
-		Are you sure to cancel this cart ?
-		<form method="post" enctype="multipart/form-data" action="index.php?page=sale&action=6">
-		<select class="form-control mt-3" name="txt_caninvNum" required>
-				<option value="">--select Invoice--</option>
-					<?php
-						$csqlgetinvnumup = "SELECT * FROM `tbl_invoice` WHERE `status` = 0 ORDER BY `invID` DESC";
-						$crunsqlgetinvnumup = mysqli_query($conn,$csqlgetinvnumup);
-						while($cgetinvnumup = mysqli_fetch_array($crunsqlgetinvnumup))
-						{
-						?>
-						<option value="<?=$cgetinvnumup['invID']?>">#<?=$cgetinvnumup['invNumber'].".(".$cgetinvnumup['not'].")"?></option>
-						<?php
-						}
-						?>
-			</select>
-			 <div class="modal-footer">
-		 		<button type="submit" class="btn btn-primary">Submit</button>
-        		<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      		</div>
-		 </form>
-      </div>
-      
     </div>
   </div>
 </div>

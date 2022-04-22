@@ -28,7 +28,11 @@ if(isset($_GET['action']))
 				{
 					$message =1;
 					$messageDialog="Import is Successfully...";
-					$updateStock = "UPDATE `tbl_products` SET `pro_stock`='$qty' WHERE `pro_id` = $id";
+					$oldstock = "SELECT  `pro_stock` FROM `tbl_products` WHERE `pro_id` = $id";
+					$result = mysqli_query($conn,$oldstock);
+					$data = mysqli_fetch_array($result);
+					$newstock = $data['pro_stock']+$qty;
+					$updateStock = "UPDATE `tbl_products` SET `pro_stock`='$newstock' WHERE `pro_id` = $id";
 					mysqli_query($conn,$updateStock);
 				}
 				else{
